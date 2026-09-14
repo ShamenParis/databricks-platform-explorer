@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Databricks Data Platform Explorer</title>
+  <meta name="description" content="Explore the Databricks Data Platform architecture in 3D. Navigate layers, inspect components, and understand how the platform works end-to-end.">
+  <meta property="og:title" content="Databricks Data Platform Explorer">
+  <meta property="og:description" content="Interactive 3D explorer for the Databricks Data Intelligence Platform — layers, components, and connections.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#080e1c">
+
+  <!-- Design system -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/sidebar.css">
+  <link rel="stylesheet" href="css/viewport.css">
+  <link rel="stylesheet" href="css/inspector.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/dais-arch.css">
+  <link rel="stylesheet" href="css/matrix-view.css">
+
+  <!-- Three.js via importmap -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.167.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.167.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <style>
+    /* Scene label styles (positioned by JS) */
+    #scene-labels { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+    .scene-label {
+      position: absolute;
+      transform: translate(-50%, -100%);
+      background: rgba(8,14,28,0.82);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 4px;
+      padding: 2px 7px;
+      font-size: 10px;
+      font-family: 'Inter', sans-serif;
+      color: rgba(232,237,245,0.7);
+      white-space: nowrap;
+      pointer-events: none;
+      transition: opacity 0.2s, background 0.2s, border-color 0.2s, transform 0.2s;
+    }
+    .scene-label.label-selected {
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.5);
+      color: #fff;
+      font-weight: 700;
+      font-size: 11px;
+      padding: 3px 10px;
+      transform: translate(-50%, -110%);
+    }
+    .scene-label.label-connected {
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(255,255,255,0.25);
+      color: rgba(232,237,245,0.95);
+      font-weight: 600;
+    }
+    .scene-label.label-oss {
+      border-color: rgba(34,211,238,0.5);
+      color: #22d3ee;
+    }
+    #hover-label {
+      position: absolute;
+      pointer-events: none;
+      background: rgba(8,14,28,0.9);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-family: 'Inter', sans-serif;
+      color: rgba(232,237,245,0.9);
+      opacity: 0;
+      transition: opacity 0.1s;
+      white-space: nowrap;
+      z-index: 10;
+    }
+
+    /* Page view scrollable wrapper */
+    .page-view {
+      grid-column: 1 / -1;
+      overflow-y: auto;
+      background: var(--bg-base);
+    }
+
+    /* Prevent scroll on explorer view */
+    #explorer-panel { display: contents; }
+
+    /* Responsive tweaks */
+    @media (max-width: 900px) {
+      :root {
+        --sidebar-w: 220px;
+        --inspector-w: 240px;
+      }
+    }
+    @media (max-width: 660px) {
+      .workspace { grid-template-columns: 1fr; }
+      .sidebar, .inspector { display: none; }
+      .view-tabs { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+<div class="explorer" role="application" aria-label="Databricks Data Platform Explorer">
+
+  <!-- ── TOP BAR ─────────────────────────────────────────── -->
+  <header class="topbar" role="banner">
+    <a class="brand" href="#" aria-label="Databricks Platform Explorer home">
+      <svg class="brand-icon" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="m16 3 13 6.5L16 16 3 9.5 16 3Z"/>
+        <path d="M3 15l13 6.5L29 15"/>
+        <path d="M3 21l13 6.5L29 21"/>
+      </svg>
+      <span>
+        <span class="brand-name">data<span>bricks</span></span>
+        <span class="brand-caption">Platform Explorer</span>
+      </span>
+    </a>
+
+    <!-- View tabs -->
+    <nav class="view-tabs" role="tablist" aria-label="Explorer views">
+      <button class="view-tab active" data-view="explorer" role="tab" aria-selected="true" id="tab-explorer">
+        Ecosystem Explorer
+      </button>
+      <button class="view-tab" data-view="architecture" role="tab" aria-selected="false" id="tab-architecture">
+        Architecture
+      </button>
+      <button class="view-tab" data-view="patterns" role="tab" aria-selected="false" id="tab-patterns">
+        Reference Patterns
+      </button>
+    </nav>
+
+    <div class="topbar-end">
+      <button class="help-btn" id="help-btn" aria-haspopup="dialog">
+        How to explore <span class="help-key">?</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ── MAIN WORKSPACE ────────────────────────────────────── -->
+  <main class="workspace" id="main-workspace" role="main">
+
+    <!-- ════════════════════════════════════════════════════
+         PANEL 1: ECOSYSTEM EXPLORER (3D)
+    ════════════════════════════════════════════════════ -->
+    <div class="view-panel" id="explorer-panel" data-panel="explorer">
+
+      <!-- LEFT SIDEBAR -->
+      <aside class="sidebar" aria-label="Architecture navigation">
+        <div class="sidebar-header">
+          <div class="sidebar-label">
+            ARCHITECTURE
+            <span class="component-count" id="component-count"></span>
+          </div>
+          <button class="overview-btn" id="overview-btn" aria-current="true">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m12 3 9 5-9 5-9-5 9-5Zm-9 9 9 5 9-5M3 16l9 5 9-5"/>
+            </svg>
+            <span>Full Ecosystem</span>
+            <svg class="chevron" viewBox="0 0 24 24" aria-hidden="true" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="m9 5 7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="sidebar-scroll">
+          <div class="nav-section">PLATFORM LAYERS</div>
+          <nav id="layer-nav" aria-label="Platform layers"></nav>
+
+          <div class="nav-section">CROSS-PLATFORM</div>
+          <nav id="shared-nav" aria-label="Cross-platform services"></nav>
+        </div>
+
+        <!-- OSS toggle -->
+        <div class="oss-toggle-wrap">
+          <button class="oss-toggle" id="oss-toggle" aria-pressed="false"
+            title="Highlight open-source components: Apache Spark, Structured Streaming, Delta Lake, Apache Iceberg, Unity Catalog, MLflow, Delta Sharing">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="6" cy="5" r="3"/><circle cx="6" cy="19" r="3"/><circle cx="18" cy="5" r="3"/>
+              <path d="M6 8v8m0-3c7 0 12-1 12-5"/>
+            </svg>
+            <span>Highlight open source</span>
+            <span class="toggle-pill" aria-hidden="true"></span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- CENTRAL VIEWPORT -->
+      <section class="viewport" aria-label="Interactive 3D architecture">
+        <!-- Heading overlay -->
+        <div class="scene-heading">
+          <div class="breadcrumbs" id="breadcrumbs">
+            <span>PLATFORM OVERVIEW</span>
+          </div>
+          <h1 id="scene-title">Data Intelligence Platform</h1>
+          <p class="scene-subtitle" id="scene-subtitle">Click a layer or component to explore.</p>
+        </div>
+
+        <!-- View tools (3D mode) -->
+        <div class="view-tools" role="group" aria-label="Camera controls">
+          <button class="icon-btn" id="pan-up" title="Pan Up Stack" aria-label="Pan Up">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+          </button>
+          <button class="icon-btn" id="pan-down" title="Pan Down Stack" aria-label="Pan Down">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+          </button>
+          <button class="icon-btn" id="reset-view" title="Reset camera" aria-label="Reset camera">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5M20 12a8 8 0 1 0-2.34 5.66"/></svg>
+          </button>
+          <button class="icon-btn" id="zoom-in" title="Zoom in" aria-label="Zoom in">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg>
+          </button>
+          <button class="icon-btn" id="zoom-out" title="Zoom out" aria-label="Zoom out">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg>
+          </button>
+        </div>
+
+        <!-- Mode Switcher: 2D Architecture Matrix (Default) vs 3D Board -->
+        <div class="viewport-mode-bar">
+          <button class="vmode-btn active" id="btn-mode-2d">
+            <span>🗺️</span> 2D Architecture Matrix <span class="vmode-badge">Recommended</span>
+          </button>
+          <button class="vmode-btn" id="btn-mode-3d">
+            <span>🧊</span> 3D Layer Stack
+          </button>
+        </div>
+
+        <!-- Camera Angles (ISO / TOP in 3D Mode) -->
+        <div class="cam-mode-bar" id="cam-mode-bar" style="display:none;">
+          <button class="cam-btn active" id="btn-cam-iso" title="Isometric 3D perspective">ISO</button>
+          <button class="cam-btn" id="btn-cam-top" title="Top-down 2D architecture view">TOP</button>
+        </div>
+
+        <!-- Quick Jump Layer Elevator (in 3D Mode) -->
+        <div class="layer-elevator-bar" id="layer-elevator-bar" style="display:none;" role="toolbar" aria-label="Quick jump to layer">
+          <span class="elevator-label">ELEVATOR:</span>
+          <button class="elevator-btn" data-layer-id="apps"><span class="e-num">05</span> Apps</button>
+          <button class="elevator-btn" data-layer-id="ai"><span class="e-num">04</span> AI/ML</button>
+          <button class="elevator-btn" data-layer-id="engineering"><span class="e-num">03</span> SQL</button>
+          <button class="elevator-btn" data-layer-id="ingestion"><span class="e-num">02</span> Ingestion</button>
+          <button class="elevator-btn" data-layer-id="storage"><span class="e-num">01</span> Storage</button>
+          <button class="elevator-btn reset" id="elevator-reset-btn">Reset</button>
+        </div>
+
+        <!-- Three.js canvas target -->
+        <div id="scene" style="display:none;" tabindex="0" role="img"
+          aria-label="3D architecture model. Drag to rotate, scroll to zoom. Arrow keys rotate. Plus/minus zoom. Components available in the navigation.">
+        </div>
+
+        <!-- 2D Interactive Matrix Canvas View -->
+        <div id="matrix-canvas-view" class="active"></div>
+
+        <!-- HTML labels overlay -->
+        <div id="scene-labels" aria-hidden="true"></div>
+
+        <!-- Hover tooltip -->
+        <div id="hover-label" role="tooltip" aria-hidden="true"></div>
+
+        <!-- Loading screen -->
+        <div id="loading" role="status" aria-live="polite">
+          <span class="loader-ring" aria-hidden="true"></span>
+          Building the architecture…
+        </div>
+
+        <!-- Legend -->
+        <div class="scene-legend" aria-hidden="true">
+          <span class="legend-dot"></span>
+          <span id="scene-status">5 platform layers · 44 components · Real-time tracing</span>
+        </div>
+
+        <!-- Bottom controls -->
+        <div class="bottom-controls">
+          <div class="assembly-controls">
+            <div class="segmented" role="group" aria-label="Layer arrangement">
+              <button id="stacked-btn" aria-pressed="false">Stacked</button>
+              <button id="exploded-btn" aria-pressed="true">Exploded</button>
+            </div>
+            <div class="separation-wrap">
+              <label for="separation">Separation</label>
+              <input id="separation" type="range" min="0" max="100" value="72" aria-label="Layer separation">
+              <output class="sep-value" id="sep-value" for="separation">72%</output>
+            </div>
+          </div>
+          <div class="gesture-hints" aria-hidden="true">
+            <span>Drag to orbit</span>
+            <span>Scroll to zoom</span>
+            <span>Click to inspect</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT INSPECTOR -->
+      <aside class="inspector" id="inspector" aria-label="Component details">
+        <div class="inspector-header">
+          <span class="inspector-eyebrow">FIELD GUIDE</span>
+          <span class="discovery-count" id="discovery-count" aria-live="polite">0 explored</span>
+        </div>
+        <div class="inspector-scroll" id="detail-content"></div>
+      </aside>
+
+    </div><!-- /explorer-panel -->
+
+    <!-- ════════════════════════════════════════════════════
+         PANEL 2: HIGH-LEVEL ARCHITECTURE
+    ════════════════════════════════════════════════════ -->
+    <div class="view-panel" id="architecture-panel" data-panel="architecture">
+      <!-- DAIS 2026 Modern Databricks Stack Architecture Mount -->
+      <div id="dais-arch-mount"></div>
+
+      <!-- Cloud Planes Template (docked into subtab) -->
+      <div id="cloud-planes-template" style="display:none;">
+        <div class="page-content" style="padding-top:10px;">
+          <div class="page-hero" style="margin-bottom:24px;">
+            <h2>Cloud Deployment Architecture</h2>
+            <p>Databricks operates across three decoupled planes: the Control Plane (managed by Databricks), the Compute Plane (your cloud account VPC or Databricks serverless), and Cloud Storage.</p>
+          </div>
+
+        <!-- Architecture diagram -->
+        <div class="arch-diagram">
+
+          <!-- Control Plane -->
+          <div class="arch-plane arch-plane--control">
+            <div class="arch-plane-header">
+              <div class="arch-plane-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="2" y="3" width="20" height="14" rx="2"/>
+                  <path d="M8 21h8M12 17v4"/>
+                </svg>
+              </div>
+              <div class="arch-plane-meta">
+                <h3>Control Plane</h3>
+                <p>Managed by Databricks in the Databricks AWS account. Houses the web app, cluster manager, job scheduler, and metadata services.</p>
+              </div>
+            </div>
+            <div class="arch-plane-body">
+              <div class="service-chip"><span class="service-chip-dot" style="background:hsl(215,80%,68%)"></span>Account Console</div>
+              <div class="service-chip"><span class="service-chip-dot" style="background:hsl(215,80%,68%)"></span>Workspace Web App</div>
+              <div class="service-chip"><span class="service-chip-dot" style="background:hsl(215,80%,68%)"></span>Cluster Manager</div>
+              <div class="service-chip"><span class="service-chip-dot" style="background:hsl(215,80%,68%)"></span>Job Scheduler</div>
+              <div class="service-chip"><span class="service-chip-dot" style="background:hsl(215,80%,68%)"></span>REST API Gateway</div>
+              <div class="service-chip"><span class="service-chip-dot" style="background:hsl(215,80%,68%)"></span>Metadata Store</div>
+              <div class="service-chip"><span class="service-chip-dot" style="background:hsl(215,80%,68%)"></span>Unity Catalog Service</div>
+              <div class="service-chip"><span class="service-chip-dot" style="background:hsl(215,80%,68%)"></span>Model Serving</div>
+            </div>
+          </div>
+
+          <div class="arch-connector">Encrypted Secure Channel (TLS / Private Link)</div>
+
+          <!-- Compute Plane -->
+          <div class="arch-plane arch-plane--compute">
+            <div class="arch-plane-header">
+              <div class="arch-plane-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="2" y="2" width="9" height="9" rx="1"/><rect x="13" y="2" width="9" height="9" rx="1"/>
+                  <rect x="2" y="13" width="9" height="9" rx="1"/><rect x="13" y="13" width="9" height="9" rx="1"/>
+                </svg>
+              </div>
+              <div class="arch-plane-meta">
+                <h3>Compute Plane</h3>
+                <p>Where your data is processed. <strong>Classic:</strong> EC2 in your AWS account (VPC). <strong>Serverless:</strong> Managed by Databricks in a secure Databricks account.</p>
+              </div>
+            </div>
+            <div class="arch-plane-body">
+              <!-- Classic -->
+              <div style="width:100%;margin-bottom:8px">
+                <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px">Classic Compute (your AWS account)</div>
+                <div style="display:flex;flex-wrap:wrap;gap:8px">
+                  <div class="service-chip"><span class="service-chip-dot" style="background:hsl(155,70%,55%)"></span>All-Purpose Clusters (EC2)</div>
+                  <div class="service-chip"><span class="service-chip-dot" style="background:hsl(155,70%,55%)"></span>Job Clusters (EC2)</div>
+                  <div class="service-chip"><span class="service-chip-dot" style="background:hsl(155,70%,55%)"></span>SQL Warehouses (Classic)</div>
+                  <div class="service-chip"><span class="service-chip-dot" style="background:hsl(155,70%,55%)"></span>Apache Spark + Photon</div>
+                  <div class="service-chip"><span class="service-chip-dot" style="background:hsl(155,70%,55%)"></span>Customer VPC / Subnet</div>
+                </div>
+              </div>
+              <!-- Serverless -->
+              <div style="width:100%">
+                <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px">Serverless Compute (Databricks account)</div>
+                <div style="display:flex;flex-wrap:wrap;gap:8px">
+                  <div class="service-chip"><span class="service-chip-dot" style="background:hsl(135,65%,55%)"></span>Serverless SQL Warehouses</div>
+                  <div class="service-chip"><span class="service-chip-dot" style="background:hsl(135,65%,55%)"></span>Serverless Jobs</div>
+                  <div class="service-chip"><span class="service-chip-dot" style="background:hsl(135,65%,55%)"></span>Serverless Notebooks</div>
+                  <div class="service-chip"><span class="service-chip-dot" style="background:hsl(135,65%,55%)"></span>Per-workspace isolation</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="arch-connector">S3 API / IAM Role Credential Vending</div>
+
+          <!-- Storage -->
+          <div class="arch-plane arch-plane--storage">
+            <div class="arch-plane-header">
+              <div class="arch-plane-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                  <path d="M3 5v5c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                  <path d="M3 10v4c0 1.66 4 3 9 3s9-1.34 9-3v-4"/>
+                  <path d="M3 14v4c0 1.66 4 3 9 3s9-1.34 9-3v-4"/>
+                </svg>
+              </div>
+              <div class="arch-plane-meta">
+                <h3>Storage Layer</h3>
+                <p>Data stored in cloud object storage in your account. Delta Lake tables, Unity Catalog Volumes, and workspace system data all reside here.</p>
+              </div>
+            </div>
+            <div class="arch-plane-body">
+              <div class="service-chip"><span class="service-chip-dot" style="background:hsl(40,80%,60%)"></span>Amazon S3 (your account)</div>
+              <div class="service-chip"><span class="service-chip-dot" style="background:hsl(40,80%,60%)"></span>Delta Lake Tables</div>
+              <div class="service-chip"><span class="service-chip-dot" style="background:hsl(40,80%,60%)"></span>Unity Catalog Volumes</div>
+              <div class="service-chip"><span class="service-chip-dot" style="background:hsl(40,80%,60%)"></span>Workspace Storage Bucket</div>
+              <div class="service-chip"><span class="service-chip-dot" style="background:hsl(40,80%,60%)"></span>DBFS (Legacy)</div>
+            </div>
+          </div>
+
+        </div><!-- /arch-diagram -->
+
+        <!-- Object hierarchy -->
+        <div style="margin-top: 40px">
+          <h2 style="font-size:1.25rem;margin-bottom:16px">Databricks Object Hierarchy</h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px">
+            <div class="arch-plane arch-plane--control" style="padding:20px">
+              <h3 style="font-size:0.9rem;color:hsl(215,80%,68%)">Account</h3>
+              <p style="font-size:0.8rem;margin-top:8px">Top-level construct. Manages identity, billing, workspaces, and Unity Catalog metastores across your organisation.</p>
+            </div>
+            <div class="arch-plane arch-plane--compute" style="padding:20px">
+              <h3 style="font-size:0.9rem;color:hsl(155,70%,55%)">Workspace</h3>
+              <p style="font-size:0.8rem;margin-top:8px">Collaboration environment per region. Users run compute, notebooks, jobs, and SQL queries within a workspace.</p>
+            </div>
+            <div class="arch-plane arch-plane--storage" style="padding:20px">
+              <h3 style="font-size:0.9rem;color:hsl(40,80%,60%)">Unity Catalog Metastore</h3>
+              <p style="font-size:0.8rem;margin-top:8px">Central governance system for data assets. Namespace: <code>catalog.schema.object</code>. Can be attached to multiple workspaces.</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:24px;padding:16px 20px;background:var(--bg-elevated);border:var(--glass-border);border-radius:var(--radius-lg)">
+          <p style="font-size:0.8rem;color:var(--text-muted);margin:0">
+            Source: <a href="https://docs.databricks.com/aws/en/getting-started/high-level-architecture" target="_blank" rel="noopener noreferrer" style="color:var(--text-link)">Databricks High-Level Architecture Docs ↗</a> — diagrams conceptual; actual network topology varies by deployment configuration.
+          </p>
+        </div>
+
+      </div><!-- /page-content -->
+      </div><!-- /cloud-planes-template -->
+    </div><!-- /architecture-panel -->
+
+    <!-- ════════════════════════════════════════════════════
+         PANEL 3: REFERENCE PATTERNS
+    ════════════════════════════════════════════════════ -->
+    <div class="view-panel" id="patterns-panel" data-panel="patterns">
+      <div class="page-content">
+        <div class="page-hero">
+          <h2>Reference Architecture Patterns</h2>
+          <p>Common architecture blueprints for building on Databricks. Each pattern links to the official documentation and architecture guides.</p>
+        </div>
+        <div class="pattern-grid" id="patterns-grid"></div>
+
+        <div style="margin-top:40px;text-align:center;padding-bottom:40px">
+          <a href="https://www.databricks.com/resources/architectures" target="_blank" rel="noopener noreferrer"
+             class="btn-primary" style="display:inline-flex">
+            Browse all Databricks architectures
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+              <path d="M14 3h7v7m0-7L10 14M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div><!-- /patterns-panel -->
+
+  </main><!-- /workspace -->
+
+  <!-- ── STATUS BAR ─────────────────────────────────────── -->
+  <footer class="statusbar" role="contentinfo">
+    <span>
+      <span class="status-dot" aria-hidden="true"></span>
+      <span id="footer-status">Interactive architecture</span>
+    </span>
+    <span>
+      Databricks Docs verified &nbsp;·&nbsp; <span id="verified-date"></span>
+      &nbsp;·&nbsp;
+      <a href="https://docs.databricks.com/aws/en/getting-started/high-level-architecture" target="_blank" rel="noopener noreferrer" style="color:var(--text-muted)">Reference docs ↗</a>
+    </span>
+  </footer>
+
+  <!-- ── HELP DIALOG ────────────────────────────────────── -->
+  <dialog id="help-dialog" aria-labelledby="help-title">
+    <div class="dialog-top">
+      <span class="dialog-eyebrow">EXPLORER CONTROLS</span>
+      <button class="icon-btn" id="close-help" aria-label="Close help">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <h2 id="help-title">Get a closer look</h2>
+    <p style="margin-top:8px;font-size:0.875rem;color:var(--text-secondary)">Pull the platform apart, then click a component to see its role and connections.</p>
+    <dl class="help-dl">
+      <div><dt>Rotate</dt><dd>Drag the 3D model, or use arrow keys when the canvas is focused.</dd></div>
+      <div><dt>Zoom</dt><dd>Scroll, pinch, or use the + / − buttons in the toolbar.</dd></div>
+      <div><dt>Inspect</dt><dd>Click any component or use the left navigation sidebar.</dd></div>
+      <div><dt>Explode</dt><dd>Use the Stacked / Exploded toggle and the Separation slider.</dd></div>
+      <div><dt>Open source</dt><dd>Toggle "Highlight open source" to illuminate Apache-licensed components.</dd></div>
+      <div><dt>Step back</dt><dd>Press Escape or click "Full Ecosystem" to return to the overview.</dd></div>
+    </dl>
+    <p class="help-note">
+      This is a conceptual architecture model. Layer height groups capabilities; it does not imply every service requires the entire layer below it. Verified against Databricks AWS documentation.
+    </p>
+    <button class="btn-primary" id="help-done" style="width:100%;justify-content:center;margin-top:20px">Explore the architecture</button>
+  </dialog>
+
+  <!-- ── NOSCRIPT fallback ──────────────────────────────── -->
+  <noscript>
+    <div style="padding:40px;text-align:center;color:#e8edf5;font-family:sans-serif">
+      <p>This explorer requires JavaScript for the 3D view.</p>
+      <p><a href="https://docs.databricks.com/aws/en/getting-started/high-level-architecture" style="color:#5ba3f5">Read the Databricks architecture docs ↗</a></p>
+    </div>
+  </noscript>
+
+</div><!-- /explorer -->
+
+<!-- ── Boot ───────────────────────────────────────────────── -->
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

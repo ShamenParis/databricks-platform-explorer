@@ -1,0 +1,232 @@
+/* =========================================================
+   DATABRICKS PLATFORM EXPLORER — Viewport (3D Canvas area)
+   ========================================================= */
+
+.viewport {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(ellipse 80% 60% at 50% 40%,
+    rgba(13, 40, 80, 0.6) 0%,
+    var(--bg-base) 70%);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Ambient grid ────────────────────────────────────────── */
+.viewport::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border-subtle) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
+  background-size: 48px 48px;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* ── Scene heading ───────────────────────────────────────── */
+.scene-heading {
+  position: absolute;
+  top: var(--space-5);
+  left: var(--space-6);
+  z-index: 4;
+  pointer-events: none;
+}
+.breadcrumbs {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: var(--space-1);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.breadcrumb-sep { opacity: 0.4; }
+.scene-heading h1 {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  text-shadow: 0 2px 16px rgba(0,0,0,0.8);
+}
+.scene-subtitle {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ── Three.js canvas container ───────────────────────────── */
+#scene {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+#scene canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* ── Hover label (tooltip over 3D) ─────────────────────── */
+#hover-label {
+  position: absolute;
+  z-index: 6;
+  pointer-events: none;
+  background: var(--bg-elevated);
+  border: var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: 6px 12px;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  box-shadow: var(--shadow-md);
+  display: none;
+  transform: translate(-50%, -120%);
+}
+#hover-label.visible { display: block; }
+
+/* ── Loading overlay ─────────────────────────────────────── */
+#loading {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  background: var(--bg-base);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  transition: opacity var(--duration-slow) var(--ease-out);
+}
+#loading.hidden { opacity: 0; pointer-events: none; }
+
+.loader-ring {
+  width: 36px; height: 36px;
+  border: 2px solid var(--border-subtle);
+  border-top-color: var(--brand-red);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* ── View tool buttons ───────────────────────────────────── */
+.view-tools {
+  position: absolute;
+  top: var(--space-5);
+  right: var(--space-5);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* ── Camera view toggle label ───────────────────────────── */
+.view-cam-btn {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  font-family: var(--font-mono);
+}
+
+/* ── Bottom controls bar ─────────────────────────────────── */
+.bottom-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0; right: 0;
+  z-index: 5;
+  padding: var(--space-4) var(--space-6);
+  background: linear-gradient(to top, rgba(8,14,28,0.9) 0%, transparent 100%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.assembly-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+/* ── Segmented control ───────────────────────────────────── */
+.segmented {
+  display: flex;
+  background: var(--bg-glass);
+  backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: 3px;
+  gap: 2px;
+}
+.segmented button {
+  padding: 5px 14px;
+  border-radius: calc(var(--radius-md) - 3px);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: background var(--duration-fast), color var(--duration-fast);
+}
+.segmented button:hover { color: var(--text-secondary); }
+.segmented button[aria-pressed="true"] {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ── Separation slider ───────────────────────────────────── */
+.separation-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+.separation-wrap input[type="range"] {
+  width: 90px;
+  accent-color: var(--brand-red);
+  cursor: pointer;
+}
+.sep-value {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  min-width: 30px;
+}
+
+/* ── Gesture hints ───────────────────────────────────────── */
+.gesture-hints {
+  display: flex;
+  gap: var(--space-4);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+.gesture-hints span::before {
+  content: '↗ ';
+  opacity: 0.5;
+}
+.gesture-hints span:nth-child(2)::before { content: '⊕ '; }
+.gesture-hints span:nth-child(3)::before { content: '⊙ '; }
+
+/* ── Scene legend ─────────────────────────────────────────── */
+.scene-legend {
+  position: absolute;
+  bottom: 60px;
+  left: var(--space-6);
+  z-index: 4;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  pointer-events: none;
+}
+.legend-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #22c55e;
+  display: inline-block;
+  animation: pulse-dot 2.5s ease-in-out infinite;
+}

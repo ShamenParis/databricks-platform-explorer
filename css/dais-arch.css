@@ -1,0 +1,797 @@
+/* =========================================================
+   DAIS 2026 · MODERN DATABRICKS STACK — ARCHITECTURE STYLES
+   Inspired directly by https://dais-2026-deck.web.app/#/
+   ========================================================= */
+
+:root {
+  --dais-bg: #0a0e14;
+  --dais-bg2: #0e1420;
+  --dais-panel: #121a28;
+  --dais-panel2: #16202f;
+  --dais-line: #22304a;
+  --dais-line2: #2d3f5e;
+  --dais-ink: #eef3fb;
+  --dais-ink2: #9fb0c9;
+  --dais-ink3: #6b7e9c;
+  --dais-lava: #ff3621;
+  --dais-lava2: #ff6a52;
+  --dais-cyan: #15afdd;
+  --dais-amber: #ffab00;
+  --dais-good: #3ddc84;
+}
+
+/* ── Container ───────────────────────────────────────────── */
+.dais-container {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 24px 20px 60px;
+  color: var(--dais-ink);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ── View Switcher Buttons ───────────────────────────────── */
+.arch-view-nav {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.arch-view-tab {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--dais-line);
+  color: var(--dais-ink2);
+  padding: 9px 20px;
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.arch-view-tab:hover {
+  border-color: var(--dais-lava);
+  color: var(--dais-ink);
+  transform: translateY(-1px);
+}
+.arch-view-tab.active {
+  background: rgba(255, 54, 33, 0.15);
+  border-color: var(--dais-lava);
+  color: #fff;
+  box-shadow: 0 0 16px rgba(255, 54, 33, 0.25);
+}
+
+/* ── Hero Section ────────────────────────────────────────── */
+.dais-hero {
+  text-align: center;
+  padding: 10px 0 24px;
+}
+.dais-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 54, 33, 0.1);
+  border: 1px solid rgba(255, 54, 33, 0.3);
+  color: var(--dais-lava2);
+  padding: 6px 18px;
+  border-radius: 99px;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.dais-kicker .pulse-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--dais-lava);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--dais-lava);
+  animation: pulse-glow 2s infinite ease-in-out;
+}
+@keyframes pulse-glow {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.6; }
+}
+
+.dais-herometa {
+  display: flex;
+  justify-content: center;
+  gap: 36px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+.dais-meta-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.dais-meta-item b {
+  font-size: 26px;
+  font-weight: 700;
+  color: #fff;
+  font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: -0.02em;
+}
+.dais-meta-item span {
+  font-size: 11.5px;
+  color: var(--dais-ink3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 2px;
+}
+
+/* ── Platform Brand Bar ──────────────────────────────────── */
+.pdwrap {
+  margin: 12px 0 20px;
+}
+.pdhead {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.pdhead .db {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Space Grotesk', -apple-system, sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--dais-ink);
+  letter-spacing: -0.01em;
+}
+.pdhead .dbsq {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  position: relative;
+  background: linear-gradient(135deg, var(--dais-lava), var(--dais-lava2));
+  box-shadow: 0 0 16px rgba(255, 54, 33, 0.55);
+}
+.pdhead .dbsq::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  border-radius: 3px;
+}
+.pdhead .sep {
+  width: 1px;
+  height: 32px;
+  background: var(--dais-line2);
+}
+.pdhead .dai {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 24px;
+  text-align: center;
+  line-height: 1;
+  color: var(--dais-ink);
+}
+.pdhead .dai .plus {
+  color: var(--dais-lava);
+}
+.pdhead .dai small {
+  display: block;
+  font-size: 8.5px;
+  letter-spacing: 0.36em;
+  color: var(--dais-ink3);
+  margin-top: 4px;
+  font-weight: 600;
+}
+.pdhead .tag {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--dais-ink);
+}
+.pdhead .tag i {
+  color: var(--dais-lava);
+  font-style: normal;
+}
+
+/* ── Platform Architecture Diagram (5 Swimlanes) ────────── */
+.pdiagram {
+  background: #091512;
+  border: 1px solid #16302a;
+  border-radius: 22px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 20px 60px -15px rgba(0, 0, 0, 0.7), inset 0 0 40px rgba(21, 175, 221, 0.04);
+}
+
+.player {
+  display: grid;
+  grid-template-columns: 190px 1fr;
+  gap: 16px;
+  align-items: center;
+  background: #1f1b1a;
+  border: 1px solid #332b27;
+  border-radius: 16px;
+  padding: 16px 20px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.player:hover {
+  border-color: rgba(255, 54, 33, 0.4);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+.player > .lbl {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.pdrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: center;
+}
+
+/* ── Interactive Items (Cards) ───────────────────────────── */
+.pditem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid transparent;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+.pditem:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 54, 33, 0.09);
+  border-color: rgba(255, 54, 33, 0.35);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+.pditem:active {
+  transform: translateY(0);
+}
+
+.itile {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(255, 54, 33, 0.15);
+  border: 1px solid rgba(255, 54, 33, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--dais-lava);
+  flex: 0 0 auto;
+  transition: all 0.18s;
+}
+.itile svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+.pditem:hover .itile {
+  background: var(--dais-lava);
+  color: #fff;
+  box-shadow: 0 0 14px rgba(255, 54, 33, 0.5);
+}
+
+.pditem .iname {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--dais-ink);
+  transition: color 0.18s;
+}
+.pditem:hover .iname {
+  color: #fff;
+}
+
+/* Small item variants (Open infra) */
+.pditem.sm {
+  padding: 4px 8px;
+  gap: 8px;
+}
+.pditem.sm .itile {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: rgba(255, 54, 33, 0.12);
+}
+.pditem.sm .itile svg {
+  width: 15px;
+  height: 15px;
+}
+.pditem.sm .iname {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--dais-ink2);
+}
+
+/* ── Agentic Work Tier ───────────────────────────────────── */
+.player.work {
+  align-items: stretch;
+}
+.workcontent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+.pdrow.worktop {
+  gap: 14px;
+  align-items: stretch;
+}
+.pgroup {
+  background: #2b2422;
+  border: 1px solid #3c322e;
+  border-radius: 14px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.pgroup.genie {
+  background: #2a2220;
+}
+.pgroup .pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.gpill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #392f2b;
+  border: 1px solid #4a3d38;
+  border-radius: 99px;
+  padding: 5px 11px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #fff;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.15s ease;
+}
+.gpill:hover {
+  background: var(--dais-lava);
+  border-color: var(--dais-lava);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 54, 33, 0.35);
+}
+.gpill .d {
+  color: var(--dais-lava2);
+  display: inline-flex;
+  align-items: center;
+}
+.gpill .d svg {
+  width: 12px;
+  height: 12px;
+  display: block;
+}
+.gpill:hover .d {
+  color: #fff;
+}
+.vsep {
+  width: 1px;
+  align-self: stretch;
+  background: #3e3430;
+  margin: 0 4px;
+}
+.workcontent .lbl.right {
+  margin-left: auto;
+  align-self: center;
+  text-align: right;
+  font-size: 13.5px;
+  color: var(--dais-ink3);
+  font-weight: 600;
+}
+.pontology {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.pontology .line {
+  flex: 1;
+  height: 1px;
+  background: #3c322e;
+}
+
+/* ── Teal Phi Subcontainer (Lakehouse & Engines) ─────────── */
+.phi {
+  background: #0d2e33 !important;
+  border: 1px solid #1c5259 !important;
+  border-radius: 14px;
+  padding: 8px 16px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  box-shadow: 0 0 20px rgba(21, 175, 221, 0.1);
+}
+
+/* ── Open Infrastructure Tier ────────────────────────────── */
+.player.infra {
+  padding: 12px 20px;
+}
+.pdrow.infra {
+  gap: 16px;
+}
+.infralabel {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--dais-ink3);
+}
+.infragap {
+  flex: 1;
+  min-width: 10px;
+}
+
+/* ── Also Announced Chips ────────────────────────────────── */
+.alsohead {
+  text-align: center;
+  color: var(--dais-ink3);
+  font-size: 13px;
+  margin: 24px 0 12px;
+  letter-spacing: 0.02em;
+}
+.xchips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  justify-content: center;
+}
+.xchip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--dais-panel);
+  border: 1px solid var(--dais-line);
+  border-radius: 99px;
+  padding: 8px 16px;
+  font-size: 13px;
+  color: var(--dais-ink2);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+.xchip:hover {
+  border-color: var(--dais-lava);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+.xchip .sim-badge {
+  background: rgba(255, 54, 33, 0.18);
+  color: var(--dais-lava2);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 99px;
+}
+.hint-text {
+  text-align: center;
+  color: var(--dais-ink3);
+  font-size: 12px;
+  margin-top: 16px;
+}
+
+/* ── Interactive Deep-Dive Drawer / Modal ─────────────────── */
+.dais-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 8, 14, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.dais-modal-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.dais-modal {
+  width: 100%;
+  max-width: 860px;
+  max-height: 90vh;
+  background: #0f1724;
+  border: 1px solid #23344d;
+  border-radius: 20px;
+  box-shadow: 0 25px 80px -15px rgba(0, 0, 0, 0.85), 0 0 30px rgba(255, 54, 33, 0.12);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  transform: scale(0.96) translateY(12px);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.dais-modal-backdrop.open .dais-modal {
+  transform: scale(1) translateY(0);
+}
+
+.modal-header {
+  padding: 24px 28px 16px;
+  border-bottom: 1px solid var(--dais-line);
+  position: relative;
+}
+.modal-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--dais-line);
+  color: var(--dais-ink2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.modal-close-btn:hover {
+  background: var(--dais-lava);
+  border-color: var(--dais-lava);
+  color: #fff;
+}
+.modal-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.modal-tag {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--dais-lava2);
+  background: rgba(255, 54, 33, 0.12);
+  padding: 3px 10px;
+  border-radius: 99px;
+}
+.modal-date {
+  font-size: 12px;
+  color: var(--dais-ink3);
+}
+.modal-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #fff;
+  font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: -0.02em;
+  margin: 0 0 10px;
+}
+.modal-summary {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--dais-ink2);
+  margin: 0;
+}
+
+.modal-body {
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ── Interactive Live Simulation Box in Modal ────────────── */
+.modal-sim-box {
+  background: #090f18;
+  border: 1px solid #1a2a40;
+  border-radius: 16px;
+  padding: 20px;
+  overflow: hidden;
+  position: relative;
+}
+.sim-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.sim-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--dais-cyan);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sim-controls {
+  display: flex;
+  gap: 8px;
+}
+.sim-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--dais-line);
+  color: var(--dais-ink2);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.15s;
+}
+.sim-btn.active, .sim-btn:hover {
+  background: rgba(21, 175, 221, 0.2);
+  border-color: var(--dais-cyan);
+  color: #fff;
+}
+
+/* ── Animated Lakehouse Flow Diagram ─────────────────────── */
+.lakehouse-flow {
+  display: grid;
+  grid-template-columns: 1fr auto 1.2fr;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 0;
+}
+.flow-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.flow-node {
+  background: #131c2b;
+  border: 1px solid #23344d;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--dais-ink);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+.flow-node.hub {
+  background: linear-gradient(135deg, rgba(255, 54, 33, 0.2), rgba(255, 106, 82, 0.1));
+  border: 2px dashed var(--dais-lava);
+  border-radius: 16px;
+  padding: 24px 20px;
+  text-align: center;
+  flex-direction: column;
+  justify-content: center;
+}
+.flow-node.hub h4 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+}
+.flow-node.hub small {
+  font-size: 11px;
+  color: var(--dais-lava2);
+}
+.flow-badge-top {
+  position: absolute;
+  top: -10px;
+  font-size: 10px;
+  font-weight: 700;
+  background: var(--dais-amber);
+  color: #000;
+  padding: 1px 8px;
+  border-radius: 99px;
+  letter-spacing: 0.04em;
+}
+.pulse-flow-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--dais-cyan);
+  box-shadow: 0 0 8px var(--dais-cyan);
+  animation: pulse-glow 1.5s infinite;
+}
+
+/* ── Stats 4-Grid in Modal ───────────────────────────────── */
+.modal-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.modal-stat-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--dais-line);
+  border-radius: 12px;
+  padding: 14px 16px;
+  text-align: center;
+}
+.modal-stat-val {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+}
+.modal-stat-lbl {
+  font-size: 11px;
+  color: var(--dais-ink3);
+  margin-top: 4px;
+  line-height: 1.3;
+}
+
+/* ── Bullet Highlights ───────────────────────────────────── */
+.modal-bullets {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.modal-bullet-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--dais-ink2);
+}
+.bullet-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--dais-lava);
+  flex-shrink: 0;
+  margin-top: 8px;
+}
+.modal-bullet-item b {
+  color: #fff;
+  margin-right: 4px;
+}
+
+/* ── Modal Footer ────────────────────────────────────────── */
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid var(--dais-line);
+}
+.modal-source-link {
+  color: var(--dais-lava2);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 13.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: 0.15s;
+}
+.modal-source-link:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media (max-width: 960px) {
+  .player {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .workcontent .lbl.right {
+    margin-left: 0;
+    text-align: left;
+  }
+  .modal-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .lakehouse-flow {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,317 @@
+/* ================================================================
+   SIDEBAR — Left navigation panel
+   ================================================================ */
+
+/* ── Icon wrappers ────────────────────────────────────────── */
+.layer-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+}
+.layer-icon-wrap svg {
+  width: 15px !important;
+  height: 15px !important;
+  display: block;
+}
+
+.layer-num-pill {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'Space Grotesk', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.sidebar-section-hdr {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  padding: 10px 10px 4px;
+}
+
+.comp-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.03);
+  transition: background 0.15s, transform 0.15s;
+}
+.comp-icon-wrap svg {
+  width: 14px !important;
+  height: 14px !important;
+  display: block;
+  opacity: 0.85;
+  transition: opacity 0.15s, transform 0.15s;
+}
+.component-btn:hover .comp-icon-wrap,
+.component-btn.active .comp-icon-wrap {
+  background: rgba(255, 54, 33, 0.15);
+}
+.component-btn:hover .comp-icon-wrap svg,
+.component-btn.active .comp-icon-wrap svg {
+  opacity: 1;
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 6px currentColor);
+}
+
+.comp-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar {
+  background: var(--bg-glass);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-right: var(--glass-border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* ── Sidebar header ─────────────────────────────────────── */
+.sidebar-header {
+  padding: var(--space-4) var(--space-4) var(--space-3);
+  border-bottom: var(--glass-border);
+  flex-shrink: 0;
+}
+.sidebar-label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.component-count {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--text-muted);
+  background: var(--bg-glass-light);
+  border: var(--glass-border);
+  border-radius: var(--radius-full);
+  padding: 1px 8px;
+}
+
+/* ── Overview button ─────────────────────────────────────── */
+.overview-btn {
+  margin-top: var(--space-3);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--bg-glass-light);
+  border: var(--glass-border);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: background var(--duration-fast), color var(--duration-fast), border-color var(--duration-fast);
+}
+.overview-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+.overview-btn.active {
+  background: rgba(255, 54, 33, 0.12);
+  border-color: rgba(255, 54, 33, 0.35);
+  color: var(--text-primary);
+}
+.overview-btn svg {
+  width: 16px; height: 16px;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.overview-btn .chevron {
+  margin-left: auto;
+  opacity: 0.4;
+}
+
+/* ── Nav scroll area ─────────────────────────────────────── */
+.sidebar-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--space-3) var(--space-4);
+}
+
+/* ── Section label ───────────────────────────────────────── */
+.nav-section {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: var(--space-5) 0 var(--space-2);
+}
+
+/* ── Layer nav item ──────────────────────────────────────── */
+.layer-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: none;
+  border: 1px solid transparent;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background var(--duration-fast), color var(--duration-fast), border-color var(--duration-fast);
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+.layer-btn::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 0;
+  border-radius: 0 2px 2px 0;
+  background: var(--layer-color, var(--brand-red));
+  transition: height var(--duration-normal) var(--ease-out);
+}
+.layer-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+.layer-btn:hover::before { height: 60%; }
+.layer-btn.active {
+  background: color-mix(in srgb, var(--layer-color, var(--brand-red)) 12%, transparent);
+  border-color: color-mix(in srgb, var(--layer-color, var(--brand-red)) 35%, transparent);
+  color: var(--text-primary);
+}
+.layer-btn.active::before { height: 80%; }
+
+.layer-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--layer-color, var(--brand-red));
+  flex-shrink: 0;
+  box-shadow: 0 0 6px var(--layer-color, var(--brand-red));
+}
+.layer-name { flex: 1; }
+.layer-count {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+/* ── Component sub-list ─────────────────────────────────── */
+.component-list {
+  margin: var(--space-1) 0 var(--space-2) 24px;
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+}
+.component-list.expanded { display: flex; }
+
+.component-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 5px var(--space-3);
+  border-radius: var(--radius-sm);
+  background: none;
+  border: none;
+  font-size: var(--text-xs);
+  font-weight: 400;
+  color: var(--text-muted);
+  cursor: pointer;
+  text-align: left;
+  transition: background var(--duration-fast), color var(--duration-fast);
+}
+.component-btn:hover { background: var(--bg-glass-light); color: var(--text-secondary); }
+.component-btn.active { color: var(--text-primary); background: var(--bg-glass-light); }
+.component-btn.discovered::after {
+  content: '✓';
+  margin-left: auto;
+  font-size: 10px;
+  color: #22c55e;
+}
+
+/* ── Open source toggle ──────────────────────────────────── */
+.oss-toggle-wrap {
+  padding: var(--space-4);
+  border-top: var(--glass-border);
+  flex-shrink: 0;
+}
+.oss-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--bg-glass-light);
+  border: var(--glass-border);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background var(--duration-fast), border-color var(--duration-fast), color var(--duration-fast);
+}
+.oss-toggle:hover { color: var(--text-primary); }
+.oss-toggle.active {
+  background: rgba(91, 163, 245, 0.1);
+  border-color: rgba(91, 163, 245, 0.35);
+  color: var(--text-link);
+}
+.oss-toggle svg {
+  width: 14px; height: 14px; flex-shrink: 0;
+  fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round;
+}
+.toggle-pill {
+  margin-left: auto;
+  width: 28px; height: 16px;
+  background: var(--bg-elevated);
+  border: var(--glass-border);
+  border-radius: var(--radius-full);
+  position: relative;
+  transition: background var(--duration-fast);
+}
+.toggle-pill::after {
+  content: '';
+  position: absolute;
+  left: 2px; top: 2px;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  transition: transform var(--duration-normal) var(--ease-out), background var(--duration-fast);
+}
+.oss-toggle.active .toggle-pill {
+  background: rgba(91, 163, 245, 0.2);
+  border-color: rgba(91, 163, 245, 0.4);
+}
+.oss-toggle.active .toggle-pill::after {
+  transform: translateX(12px);
+  background: var(--text-link);
+}

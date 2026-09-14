@@ -1,0 +1,478 @@
+/* =========================================================
+   2D INTERACTIVE ARCHITECTURE MATRIX & VIEW CONTROLS
+   ========================================================= */
+
+/* ── Viewport Mode Switcher (Top of Canvas) ──────────────── */
+.viewport-mode-bar {
+  position: absolute;
+  top: 14px;
+  left: 18px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(8, 14, 28, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 99px;
+  padding: 4px 6px;
+  z-index: 15;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+.vmode-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 99px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+.vmode-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+}
+.vmode-btn.active {
+  background: rgba(255, 54, 33, 0.18);
+  color: #fff;
+  border: 1px solid rgba(255, 54, 33, 0.4);
+  box-shadow: 0 0 12px rgba(255, 54, 33, 0.25);
+}
+.vmode-badge {
+  font-size: 10px;
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  padding: 1px 7px;
+  border-radius: 99px;
+  margin-left: 2px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* ── Layer Elevator Bar (Quick Jump in 3D Mode) ─────────── */
+.layer-elevator-bar {
+  position: absolute;
+  bottom: 56px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(10, 16, 30, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 99px;
+  padding: 5px 12px;
+  z-index: 15;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
+}
+.elevator-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #94a3b8;
+  margin-right: 2px;
+}
+.elevator-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 99px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.16s ease;
+}
+.elevator-btn:hover {
+  background: rgba(255, 54, 33, 0.2);
+  border-color: rgba(255, 54, 33, 0.5);
+  color: #fff;
+  transform: translateY(-1px);
+}
+.elevator-btn.active {
+  background: #ff3621;
+  border-color: #ff3621;
+  color: #fff;
+  box-shadow: 0 0 12px rgba(255, 54, 33, 0.4);
+}
+.elevator-btn .e-num {
+  font-size: 9px;
+  font-weight: 800;
+  opacity: 0.75;
+}
+.elevator-btn.reset {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+}
+.elevator-btn.reset:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+/* ── Camera Angle Switcher (ISO / TOP) ───────────────────── */
+.cam-mode-bar {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(8, 14, 28, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 3px;
+  z-index: 15;
+}
+.cam-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.cam-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+}
+.cam-btn.active {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+/* ── 2D Matrix Container ─────────────────────────────────── */
+#matrix-canvas-view {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  background: #080d17;
+  padding: 60px 24px 80px;
+  z-index: 10;
+  display: none;
+}
+#matrix-canvas-view.active {
+  display: block;
+}
+
+.matrix-wrapper {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── Top Bar: Guided Data Stories ────────────────────────── */
+.matrix-journeys-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(13, 22, 38, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 10px 16px;
+  flex-wrap: wrap;
+}
+.journey-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--brand-orange);
+  text-transform: uppercase;
+}
+.journey-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.journey-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 99px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: all 0.18s ease;
+}
+.journey-btn:hover {
+  background: rgba(255, 54, 33, 0.12);
+  border-color: rgba(255, 54, 33, 0.35);
+  color: #fff;
+  transform: translateY(-1px);
+}
+.journey-btn.active {
+  background: rgba(255, 54, 33, 0.2);
+  border-color: var(--brand-red);
+  color: #fff;
+  box-shadow: 0 0 14px rgba(255, 54, 33, 0.3);
+}
+.journey-btn .j-play {
+  font-size: 10px;
+  color: var(--brand-orange);
+}
+.journey-btn .j-badge {
+  font-size: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 1px 6px;
+  border-radius: 99px;
+  color: var(--text-muted);
+}
+.journey-btn.reset {
+  background: rgba(255, 255, 255, 0.02);
+  border-color: transparent;
+  color: var(--text-muted);
+}
+.journey-btn.reset:hover {
+  color: #fff;
+}
+
+/* ── 5 Swimlanes ─────────────────────────────────────────── */
+.matrix-swimlanes {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.matrix-layer {
+  background: rgba(13, 20, 32, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+.matrix-layer:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+}
+.matrix-layer.active-layer {
+  border-color: var(--lcolor);
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.15);
+}
+
+.matrix-layer-hdr {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  user-select: none;
+}
+.mlayer-num {
+  font-size: 14px;
+  font-weight: 800;
+  font-family: 'Space Grotesk', sans-serif;
+  color: #fff;
+  background: var(--lcolor);
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 12px var(--lcolor);
+}
+.mlayer-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.mlayer-title {
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Space Grotesk', sans-serif;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+.mlayer-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Component Grid Inside Layer */
+.matrix-layer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 10px;
+}
+
+/* ── Component Card ──────────────────────────────────────── */
+.matrix-card {
+  background: rgba(20, 29, 46, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+}
+.matrix-card:hover {
+  background: rgba(30, 42, 66, 0.85);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+.matrix-card:active {
+  transform: translateY(0);
+}
+
+.matrix-card.active {
+  background: rgba(255, 54, 33, 0.14);
+  border-color: #ff3621;
+  box-shadow: 0 0 20px rgba(255, 54, 33, 0.4);
+}
+.matrix-card.connected-downstream {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: #38bdf8;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.3);
+}
+.matrix-card.journey-node {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: #f59e0b;
+  box-shadow: 0 0 18px rgba(245, 158, 11, 0.4);
+}
+.matrix-card.dimmed {
+  opacity: 0.25;
+}
+
+.mcard-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.mcard-icon svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+.matrix-card.active .mcard-icon {
+  background: rgba(255, 54, 33, 0.25);
+}
+
+.mcard-text {
+  flex: 1;
+  min-width: 0;
+}
+.mcard-name {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mcard-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}
+
+.mcard-oss {
+  font-size: 9px;
+  font-weight: 700;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
+  padding: 2px 6px;
+  border-radius: 4px;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+.mcard-step-badge {
+  position: absolute;
+  bottom: 6px;
+  right: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.2);
+  padding: 1px 6px;
+  border-radius: 99px;
+  letter-spacing: 0.04em;
+}
+
+/* ── Baseboard Foundation Row ────────────────────────────── */
+.matrix-baseboard-hdr {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-top: 10px;
+  padding-left: 4px;
+}
+.matrix-baseboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.matrix-base-col {
+  background: rgba(11, 17, 28, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.mbase-col-title {
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.mbase-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.matrix-card.sm {
+  padding: 8px 12px;
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media (max-width: 960px) {
+  .matrix-baseboard-grid {
+    grid-template-columns: 1fr;
+  }
+}

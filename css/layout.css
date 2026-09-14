@@ -1,0 +1,162 @@
+/* =========================================================
+   DATABRICKS PLATFORM EXPLORER — Layout
+   ========================================================= */
+
+/* ── Root shell ─────────────────────────────────────────── */
+.explorer {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* ── Top bar ─────────────────────────────────────────────── */
+.topbar {
+  height: var(--topbar-h);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-6);
+  background: var(--bg-glass);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: var(--glass-border);
+  position: relative;
+  z-index: 10;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  text-decoration: none;
+  color: var(--text-primary);
+}
+.brand-icon {
+  width: 28px; height: 28px;
+  flex-shrink: 0;
+}
+.brand-icon path {
+  fill: none;
+  stroke: var(--brand-red);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.brand-name {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+.brand-name span {
+  color: var(--brand-red);
+}
+.brand-caption {
+  font-size: var(--text-xs);
+  font-weight: 400;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  display: block;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+/* ── View tabs in topbar ────────────────────────────────── */
+.view-tabs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: var(--bg-glass-light);
+  border: var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 3px;
+}
+.view-tab {
+  padding: 6px 16px;
+  border-radius: calc(var(--radius-lg) - 3px);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background var(--duration-fast), color var(--duration-fast);
+  border: none;
+  background: none;
+  white-space: nowrap;
+}
+.view-tab:hover { color: var(--text-primary); }
+.view-tab.active {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.topbar-end {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.help-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 6px 14px;
+  border-radius: var(--radius-md);
+  background: var(--bg-glass-light);
+  border: var(--glass-border);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  transition: color var(--duration-fast), border-color var(--duration-fast);
+}
+.help-btn:hover { color: var(--text-primary); border-color: var(--border-default); }
+.help-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px; height: 20px;
+  border-radius: 4px;
+  background: var(--bg-elevated);
+  border: var(--glass-border);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font-mono);
+}
+
+/* ── Main workspace ──────────────────────────────────────── */
+.workspace {
+  flex: 1;
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr var(--inspector-w);
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* ── Status bar ─────────────────────────────────────────── */
+.statusbar {
+  height: var(--statusbar-h);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-6);
+  background: var(--bg-glass);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-top: var(--glass-border);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  z-index: 10;
+}
+.status-dot {
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #22c55e;
+  margin-right: var(--space-2);
+  animation: pulse-dot 2.5s ease-in-out infinite;
+}
+
+/* ── View panels — display managed entirely by main.js ──── */
+.view-panel { display: none; }
+

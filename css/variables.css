@@ -1,0 +1,99 @@
+/* =========================================================
+   DATABRICKS PLATFORM EXPLORER — Design Tokens
+   ========================================================= */
+
+:root {
+  /* ── Brand ─────────────────────────────────────────── */
+  --brand-red:      #ff3621;
+  --brand-red-dim:  #cc2a19;
+  --brand-orange:   #ff6f40;
+  --brand-amber:    #ffa500;
+
+  /* ── Background ─────────────────────────────────────── */
+  --bg-base:        #080e1c;
+  --bg-surface:     #0d1626;
+  --bg-elevated:    #111e35;
+  --bg-hover:       #172440;
+  --bg-glass:       rgba(13, 22, 38, 0.72);
+  --bg-glass-light: rgba(255, 255, 255, 0.04);
+
+  /* ── Layer colors (each arch layer gets a hue) ──────── */
+  --layer-sources:     hsl(215, 80%, 58%);
+  --layer-ingestion:   hsl(195, 80%, 52%);
+  --layer-storage:     hsl(175, 75%, 46%);
+  --layer-compute:     hsl(155, 70%, 44%);
+  --layer-processing:  hsl(135, 65%, 42%);
+  --layer-ai:          hsl(270, 70%, 62%);
+  --layer-governance:  hsl(40,  80%, 54%);
+  --layer-serving:     hsl(20,  80%, 58%);
+  --layer-ops:         hsl(200, 60%, 50%);
+  --layer-security:    hsl(0,   70%, 54%);
+  --layer-control:     hsl(220, 55%, 52%);
+  --layer-crosscut:    hsl(300, 55%, 56%);
+
+  /* ── Text ───────────────────────────────────────────── */
+  --text-primary:   #e8edf5;
+  --text-secondary: #8da0bc;
+  --text-muted:     #4d6480;
+  --text-accent:    #ff6f40;
+  --text-link:      #5ba3f5;
+
+  /* ── Border ─────────────────────────────────────────── */
+  --border-subtle:  rgba(255, 255, 255, 0.06);
+  --border-default: rgba(255, 255, 255, 0.12);
+  --border-strong:  rgba(255, 255, 255, 0.22);
+  --border-accent:  rgba(255, 111, 64, 0.4);
+
+  /* ── Shadows ─────────────────────────────────────────── */
+  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md:  0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-lg:  0 12px 40px rgba(0, 0, 0, 0.65);
+  --shadow-glow: 0 0 24px rgba(255, 111, 64, 0.2);
+
+  /* ── Layout ──────────────────────────────────────────── */
+  --sidebar-w:    280px;
+  --inspector-w:  300px;
+  --topbar-h:     56px;
+  --statusbar-h:  32px;
+
+  /* ── Spacing ─────────────────────────────────────────── */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* ── Typography ──────────────────────────────────────── */
+  --font-sans: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  --text-xs:   0.70rem;
+  --text-sm:   0.8125rem;
+  --text-base: 0.9375rem;
+  --text-lg:   1.0625rem;
+  --text-xl:   1.25rem;
+  --text-2xl:  1.5rem;
+  --text-3xl:  2rem;
+
+  /* ── Radius ──────────────────────────────────────────── */
+  --radius-sm:  4px;
+  --radius-md:  8px;
+  --radius-lg:  12px;
+  --radius-xl:  18px;
+  --radius-full: 9999px;
+
+  /* ── Transitions ─────────────────────────────────────── */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in:  cubic-bezier(0.4, 0, 1, 1);
+  --duration-fast:   120ms;
+  --duration-normal: 220ms;
+  --duration-slow:   400ms;
+
+  /* ── Glassmorphism ───────────────────────────────────── */
+  --glass-blur:   blur(16px);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+}
