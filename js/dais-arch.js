@@ -7,6 +7,49 @@ import { SVGS, getSvg } from './icons.js';
 
 // ── DAIS 2026 Architecture Modules Registry ────────────────
 export const DAIS_MODULES = {
+  // ── Core Open Storage & Table Formats ──
+  deltalake: {
+    tag: "Open Storage Layer",
+    date: "Open Foundation",
+    title: "Delta Lake",
+    sum: "The open-source storage framework that brings ACID transactions, scalable metadata handling, and unified streaming and batch data processing to cloud object storage.",
+    bullets: [
+      ["ACID transactions", "Serializable or write-serializable transaction guarantees prevent dirty reads and inconsistent states during concurrent reads/writes."],
+      ["UniForm (Universal Format)", "Read Delta tables natively as Apache Iceberg or Apache Hudi without duplicating data files or running conversion pipelines."],
+      ["Time travel & schema evolution", "Query historical snapshots of tables with versioning/timestamps, roll back accidental deletes, and evolve schemas automatically."],
+      ["Performance optimizations", "Liquid clustering, Z-ordering, predictive I/O, data skipping, and Parquet caching for ultra-fast queries."]
+    ],
+    stats: [
+      ["Open source", "Linux Foundation hosted project"],
+      ["UniForm", "Zero-copy Delta + Iceberg + Hudi"],
+      ["100% ACID", "Multi-version concurrency control (MVCC)"],
+      ["50M+", "Monthly downloads globally"]
+    ],
+    src: "https://delta.io",
+    simType: "deltalake"
+  },
+
+  iceberg: {
+    tag: "Open Table Format",
+    date: "Open Foundation",
+    title: "Apache Iceberg Support & UniForm",
+    sum: "First-class Apache Iceberg interoperability via Delta Lake UniForm and Unity Catalog: read and write Iceberg tables with zero data duplication, using the open Iceberg REST catalog API.",
+    bullets: [
+      ["UniForm zero-copy access", "Write data once and query it seamlessly as either Delta Lake or Apache Iceberg with automatic metadata translation."],
+      ["Apache Iceberg REST Catalog", "Unity Catalog implements the open Iceberg REST Catalog API, enabling external engines (Snowflake, Trino, BigQuery, Spark) to read governed tables."],
+      ["No data duplication", "Eliminates duplicate storage costs and out-of-sync copies by maintaining dual Iceberg and Delta metadata pointing to the same Parquet files."],
+      ["Universal governance", "Row filters, column masks, and access control policies defined in Unity Catalog apply uniformly to Iceberg queries."]
+    ],
+    stats: [
+      ["REST API", "Open Iceberg REST catalog compatible"],
+      ["0 copies", "Shared Parquet files across formats"],
+      ["Multi-engine", "Snowflake · Trino · Spark · Presto"],
+      ["Bi-directional", "Read & write Iceberg natively"]
+    ],
+    src: "https://www.databricks.com/product/delta-lake/uniform",
+    simType: "iceberg"
+  },
+
   lakehouse: {
     tag: "Open Lakehouse",
     date: "Platform Foundation",
@@ -68,6 +111,27 @@ export const DAIS_MODULES = {
     ],
     src: "https://www.databricks.com/blog/introducing-lakehousert-real-time-performance-unified-lakehouse",
     simType: "ltap"
+  },
+
+  lakebase: {
+    tag: "Serverless Postgres",
+    date: "Feb 2026",
+    title: "Databricks Lakebase",
+    sum: "The operational database for the AI era: production-ready serverless Postgres built into the Lakehouse for transactional applications, agent memory, and real-time state with zero-ETL integration.",
+    bullets: [
+      ["Serverless Postgres engine", "Fully managed, scalable PostgreSQL database built directly into Databricks with instant provisioning and automated scaling."],
+      ["AI Agent system-of-record", "Store conversational memory, tool state, agent configurations, and transactional audit trails with microsecond latency."],
+      ["Zero-ETL Lakehouse replication", "Operational records written to Lakebase are automatically, continuously mirrored to Delta Lake tables for real-time analytics."],
+      ["Unified Unity Catalog governance", "Manage database users, access control lists, and encryption keys under a single unified security framework."]
+    ],
+    stats: [
+      ["100%", "PostgreSQL wire-compatible"],
+      ["0 ETL", "Continuous bidirectional Delta sync"],
+      ["Serverless", "Instant scale & pay-per-use"],
+      ["Microsecond", "Operational read/write latency"]
+    ],
+    src: "https://www.databricks.com/product/lakebase",
+    simType: "lakebase"
   },
 
   lakebasepartners: {
@@ -151,11 +215,11 @@ export const DAIS_MODULES = {
     src: "https://www.databricks.com/blog/ai-governance-data-ai-summit-2026-whats-new-unity-ai-gateway"
   },
 
-  geniecode: {
+  genie: {
     tag: "Conversational Analytics",
     date: "Platform",
     title: "Databricks Genie",
-    sum: "Conversational AI coworker that answers complex data questions in natural language, generating verified SQL queries over the lakehouse.",
+    sum: "Conversational AI coworker that answers complex data questions in natural language, generating verified SQL queries, calculations, and charts over the lakehouse.",
     bullets: [
       ["Conversational Q&A", "Understands domain-specific jargon, translates ambiguous questions into accurate SQL, and plots interactive visualizations."],
       ["Trusted answers", "Subject matter experts can attach certified SQL logic for KPI queries to ensure 100% precision."],
@@ -170,6 +234,27 @@ export const DAIS_MODULES = {
     ],
     src: "https://www.databricks.com/product/databricks-genie",
     simType: "genie"
+  },
+
+  geniecode: {
+    tag: "AI Code Assistant",
+    date: "Platform",
+    title: "Genie Code & Databricks Assistant",
+    sum: "Context-aware AI pair programmer for data teams: generate, refactor, debug, and optimize SQL, Python, R, and Scala directly inside Databricks notebooks and the SQL editor.",
+    bullets: [
+      ["Context-aware code generation", "Leverages Unity Catalog schema metadata, table definitions, and column comments to generate accurate queries and pipeline code."],
+      ["Instant error diagnostics", "Click 'Diagnose Error' on any failed cell or job run to automatically identify the root cause and receive a 1-click syntax or logic fix."],
+      ["Automated code refactoring", "Translate legacy PySpark, Pandas, or SQL dialect scripts into modern, vectorized Photon-optimized syntax."],
+      ["Inline autocomplete & doc generation", "Real-time code completions, inline explanations of complex transformations, and automated docstring generation."]
+    ],
+    stats: [
+      ["50%+", "Faster pipeline development"],
+      ["Contextual", "Understands schemas & Unity Catalog"],
+      ["Multi-language", "SQL · Python · Scala · R"],
+      ["1-click", "Automated error diagnosis & fixes"]
+    ],
+    src: "https://www.databricks.com/product/assistant",
+    simType: "geniecode"
   },
 
   genieone: {
@@ -314,6 +399,27 @@ export const DAIS_MODULES = {
     src: "https://www.databricks.com/blog/introducing-genie-one-genie-ontology-and-genie-agents"
   },
 
+  apps: {
+    tag: "Serverless Applications",
+    date: "June 2026",
+    title: "Databricks Apps",
+    sum: "Build, deploy, and securely host full-stack data and AI applications (Streamlit, Dash, Gradio, FastAPI, React) natively within Databricks with automatic Unity Catalog governance.",
+    bullets: [
+      ["Native full-stack apps", "Deploy interactive data applications using Python, Streamlit, Dash, Gradio, FastAPI, or custom React frontends directly within your workspace."],
+      ["Automatic governance & auth", "Inherits Unity Catalog permissions, role-based access control (RBAC), and Single Sign-On (SSO) out of the box with zero boilerplate."],
+      ["Serverless compute", "Instant provisioning, auto-scaling, and scale-to-zero compute economics without managing VMs, Kubernetes pods, or containers."],
+      ["Secure data access", "Query Lakehouse tables, Vector Search indexes, and call Model Serving endpoints safely within the enterprise network perimeter."]
+    ],
+    stats: [
+      ["0 config", "Instant SSO & Unity Catalog auth"],
+      ["Serverless", "Auto-scaling micro-VM containers"],
+      ["Frameworks", "Streamlit · Dash · Gradio · FastAPI"],
+      ["Enterprise", "Private networking & egress control"]
+    ],
+    src: "https://www.databricks.com/product/databricks-apps",
+    simType: "apps"
+  },
+
   marketplace: {
     tag: "Marketplace & Apps",
     date: "June 2026",
@@ -392,6 +498,153 @@ export const DAIS_MODULES = {
       ["Hundreds EB", "Of production enterprise data managed"]
     ],
     src: "https://www.databricks.com/product/delta-sharing"
+  },
+
+  anycloud: {
+    tag: "Multi-Cloud Architecture",
+    date: "Platform Foundation",
+    title: "Any Cloud — Multi-Cloud Data Intelligence",
+    sum: "Deploy and operate Databricks across AWS, Microsoft Azure, and Google Cloud Platform (GCP) with identical APIs, unified cross-cloud governance, and zero vendor lock-in.",
+    bullets: [
+      ["Consistent experience on all 3 clouds", "The exact same notebooks, SQL warehouses, serverless compute, and ML pipelines across AWS, Azure, and Google Cloud."],
+      ["Unified cross-cloud governance", "Unity Catalog provides a single metastore and identity model governing data assets residing in S3, ADLS Gen2, and Google Cloud Storage (GCS)."],
+      ["Delta Sharing multi-cloud federation", "Share live data and models across clouds and regions with zero egress fees and zero data copying."],
+      ["Disaster recovery & workload portability", "Easily migrate workloads or balance compute capacity across cloud providers without rewriting application code."]
+    ],
+    stats: [
+      ["3 clouds", "AWS · Microsoft Azure · Google Cloud"],
+      ["1 catalog", "Cross-cloud Unity Catalog governance"],
+      ["100% portable", "Open formats & standard SQL/Python"],
+      ["0 lock-in", "Runs directly on your object storage"]
+    ],
+    src: "https://www.databricks.com/product/multi-cloud",
+    simType: "anycloud"
+  },
+
+  anymodel: {
+    tag: "AI Model Freedom",
+    date: "June 2026",
+    title: "Any Model — Mosaic AI Model Serving",
+    sum: "Build with any AI model: route to frontier proprietary LLMs (OpenAI, Anthropic, Gemini), serve open-source foundation models (Llama, Mistral, DBRX), or deploy custom fine-tuned weights under unified enterprise governance.",
+    bullets: [
+      ["Frontier external APIs", "Call OpenAI GPT-4o, Anthropic Claude 3.5, and Google Gemini via unified, rate-limited, and cost-capped Foundation Model APIs."],
+      ["Open weights hosting", "Serverless 1-click deployment for open-source LLMs including Llama 3, Mistral, and DBRX on optimized GPU infrastructure."],
+      ["Custom fine-tuning & domain adaptation", "Fine-tune models on your proprietary lakehouse data with Mosaic AI Model Training using your own IP safely."],
+      ["Unified security & evaluation", "Unity AI Gateway enforces guardrails, PII masking, and audit logging across all models, while MLflow evaluates output quality."]
+    ],
+    stats: [
+      ["Any LLM", "Proprietary APIs + Open Source + Custom"],
+      ["Sub-ms", "High-throughput serverless model serving"],
+      ["100% private", "Customer data never trains vendor models"],
+      ["Auto-eval", "MLflow LLM evaluation & benchmarking"]
+    ],
+    src: "https://www.databricks.com/product/mosaic-ai-foundation-models",
+    simType: "anymodel"
+  },
+
+  anydata: {
+    tag: "Multimodal Intelligence",
+    date: "Platform Foundation",
+    title: "Any Data — Multimodal Lakehouse",
+    sum: "Ingest, govern, and analyze any data type in the Lakehouse: structured tables, semi-structured logs & JSON, and unstructured text, images, audio, video, PDFs, and vector embeddings.",
+    bullets: [
+      ["Multimodal AI & unstructured data", "Store documents, audio, video, and PDFs in Unity Catalog Volumes; extract knowledge automatically with Mosaic AI."],
+      ["Semi-structured & streaming", "Native support for JSON, Parquet, Avro, XML, and CDC changelog streams with automatic schema inference and evolution."],
+      ["Integrated Vector Search", "Automatically compute and sync embeddings into serverless vector indexes for semantic search and RAG applications."],
+      ["Uniform governance across all types", "Apply access controls, lineage tracking, and audit logging to raw files and unstructured volumes just like SQL tables."]
+    ],
+    stats: [
+      ["All types", "Structured · Semi-structured · Unstructured"],
+      ["Volumes", "Native governance for non-tabular files"],
+      ["Vector Search", "Auto-syncing vector index generation"],
+      ["0 silos", "One security boundary for all assets"]
+    ],
+    src: "https://www.databricks.com/product/data-lakehouse",
+    simType: "anydata"
+  },
+
+  realtime_ml: {
+    tag: "Real-Time Machine Learning",
+    date: "June 2026",
+    title: "Mosaic AI Real-Time ML & Serving",
+    sum: "Ultra-low latency inference, feature serving, and streaming machine learning directly over the Lakehouse for real-time recommendations, fraud detection, and agentic workflows.",
+    bullets: [
+      ["Sub-10ms model serving", "Serve Scikit-learn, PyTorch, XGBoost, and ONNX models on auto-scaling serverless infrastructure with millisecond response times."],
+      ["Online Feature Store", "Synchronize batch features to low-latency key-value stores for real-time feature lookup during inference."],
+      ["Continuous model monitoring", "Automatically track latency, throughput, data drift, and prediction anomalies in production using Lakehouse Monitoring."],
+      ["Streaming inference integration", "Score live event streams from Kafka, Kinesis, and Event Hubs with Structured Streaming pipelines."]
+    ],
+    stats: [
+      ["sub-10ms", "P99 inference latency"],
+      ["Auto-scale", "Scales to zero when idle"],
+      ["Feature store", "Online/offline feature consistency"],
+      ["Drift tracking", "Automated production monitoring"]
+    ],
+    src: "https://www.databricks.com/product/machine-learning",
+    simType: "realtime_ml"
+  },
+
+  secureconnect: {
+    tag: "Enterprise Networking",
+    date: "June 2026",
+    title: "SecureConnect — Zero-Trust Private Connectivity",
+    sum: "Secure, managed private connectivity between Databricks serverless compute, on-premises corporate data sources, and multi-cloud VPCs without complex VPNs or public IP exposure.",
+    bullets: [
+      ["Zero public IP exposure", "Connect serverless SQL warehouses and notebooks to internal enterprise networks through secure, private tunnels."],
+      ["Automated firewall traversal", "Eliminates tedious IP allowlist churn and manual proxy configurations across cloud networks."],
+      ["PrivateLink & PSC integration", "Native integration with AWS PrivateLink, Azure Private Link, and GCP Private Service Connect."],
+      ["End-to-end encryption", "mTLS cryptographic handshake and continuous posture validation for all network transit."]
+    ],
+    stats: [
+      ["0 public IPs", "Complete private network isolation"],
+      ["1-click", "Setup without network redesign"],
+      ["Multi-cloud", "AWS PrivateLink · Azure · GCP PSC"],
+      ["SOC2 / FedRAMP", "Certified compliance security"]
+    ],
+    src: "https://www.databricks.com/product/security",
+    simType: "secureconnect"
+  },
+
+  aibi_dashboards: {
+    tag: "Intelligent BI",
+    date: "Platform",
+    title: "AI/BI Dashboards",
+    sum: "Next-generation business intelligence built directly into the Lakehouse: low-code interactive visualization with conversational Genie spaces and automated data refresh.",
+    bullets: [
+      ["Built-in lakehouse visualizations", "Create rich, responsive dashboards with 20+ chart types, multi-tab layouts, and parameter cross-filtering."],
+      ["Conversational Genie integration", "Every dashboard can be paired with a Genie space, allowing business users to ask follow-up questions in natural language."],
+      ["Serverless SQL speed", "Powered by serverless SQL warehouses with automated query caching and instant concurrency scaling."],
+      ["Governed publishing & sharing", "Share interactive dashboards with external stakeholders or embed inside enterprise portals with Unity Catalog permissions."]
+    ],
+    stats: [
+      ["20+", "Native chart types & widgets"],
+      ["Sub-second", "Cached query response times"],
+      ["Conversational", "Genie Q&A embedded directly"],
+      ["100%", "Governed by Unity Catalog"]
+    ],
+    src: "https://www.databricks.com/product/databricks-sql",
+    simType: "aibi_dashboards"
+  },
+
+  free_edition: {
+    tag: "Community & Developer",
+    date: "Always Available",
+    title: "Databricks Free Edition & Learning Platform",
+    sum: "Instant, free self-service access to Databricks for developers, students, and practitioners to learn Apache Spark, Delta Lake, SQL, and machine learning with zero credit card required.",
+    bullets: [
+      ["Instant access with zero setup", "Spin up a pre-configured micro-cluster with Apache Spark and Delta Lake in seconds with no cloud credentials needed."],
+      ["Interactive notebooks & tutorials", "Hands-on access to guided tutorials for data engineering, generative AI, feature engineering, and analytics."],
+      ["Sample datasets included", "Pre-loaded with popular open datasets (COVID, financial markets, Wikipedia, IoT telemetry) to test transformations immediately."],
+      ["Seamless transition to production", "Export notebooks and code directly to commercial Databricks workspaces on AWS, Azure, or GCP."]
+    ],
+    stats: [
+      ["$0", "Completely free access"],
+      ["0 setup", "No credit card or cloud account required"],
+      ["Pre-loaded", "Rich sample datasets & tutorials"],
+      ["1M+", "Community developers trained"]
+    ],
+    src: "https://www.databricks.com/try-databricks",
+    simType: "free_edition"
   },
 
   azure: {
@@ -476,7 +729,7 @@ export function renderDaisArchitecture() {
           <div class="player">
             <div class="lbl">Agentic Apps</div>
             <div class="pdrow">
-              ${makeItem('marketplace', 'apps', 'Apps')}
+              ${makeItem('apps', 'apps', 'Apps')}
               ${makeItem('lakewatch', 'watch', 'Lakewatch')}
               ${makeItem('agenticcdp', 'people', 'CustomerLake')}
             </div>
@@ -488,7 +741,7 @@ export function renderDaisArchitecture() {
             <div class="workcontent">
               <div class="pdrow worktop">
                 <div class="pgroup genie">
-                  ${makeItem('geniecode', 'genie', 'Genie')}
+                  ${makeItem('genie', 'genie', 'Genie')}
                   <div class="pills">
                     ${makePill('genieone', 'one', 'One')}
                     ${makePill('genieagents', 'genie', '+ Agents')}
@@ -530,7 +783,7 @@ export function renderDaisArchitecture() {
                 ${makeItem('lakehouse', 'house', 'Lakehouse')}
                 ${makeItem('ltap', 'layers', 'LTAP')}
                 ${makeItem('lakehousert', 'flow', 'Lakehouse//RT')}
-                ${makeItem('lakebasepartners', 'db', 'Lakebase')}
+                ${makeItem('lakebase', 'db', 'Lakebase')}
               </div>
             </div>
           </div>
@@ -540,12 +793,12 @@ export function renderDaisArchitecture() {
             <div class="lbl">Open Infrastructure</div>
             <div class="pdrow infra">
               <span class="infralabel">Open Format Data Lake</span>
-              ${makeItem('lakehouse', 'delta', 'Delta Lake', true)}
-              ${makeItem('lakehouse', 'iceberg', 'Iceberg', true)}
+              ${makeItem('deltalake', 'delta', 'Delta Lake', true)}
+              ${makeItem('iceberg', 'iceberg', 'Iceberg', true)}
               <span class="infragap"></span>
-              ${makeItem('azure', 'cloud', 'Any Cloud', true)}
-              ${makeItem('agentbricks', 'model', 'Any Model', true)}
-              ${makeItem('opensharing', 'share', 'Any Data', true)}
+              ${makeItem('anycloud', 'cloud', 'Any Cloud', true)}
+              ${makeItem('anymodel', 'model', 'Any Model', true)}
+              ${makeItem('anydata', 'layers', 'Any Data', true)}
             </div>
           </div>
 
@@ -554,18 +807,19 @@ export function renderDaisArchitecture() {
         <!-- Additional Announcement Chips -->
         <div class="alsohead">Also announced at DAIS 2026 — click any to explore with live interactive simulation</div>
         <div class="xchips">
-          ${makeChip('lakehousert', 'AI Platform — Real-Time ML', true)}
+          ${makeChip('realtime_ml', 'AI Platform — Real-Time ML', true)}
           ${makeChip('opensharing', 'OpenSharing', true)}
-          ${makeChip('opensharing', 'SecureConnect', true)}
+          ${makeChip('secureconnect', 'SecureConnect', true)}
           ${makeChip('lakeflow', 'AI-First Data Engineering', true)}
           ${makeChip('lakewatch', 'Platform Security & Compliance', true)}
-          ${makeChip('geniecode', 'AI/BI Dashboards', true)}
-          ${makeChip('lakebasepartners', 'Free Edition', false)}
+          ${makeChip('aibi_dashboards', 'AI/BI Dashboards', true)}
+          ${makeChip('free_edition', 'Free Edition', false)}
+          ${makeChip('marketplace', 'Databricks Marketplace', false)}
           ${makeChip('azure', 'Azure Databricks', false)}
           ${makeChip('aws', 'AWS Reference', false)}
         </div>
         <div class="hint-text">
-          ⚡ 22 modules have live interactive simulations · Click any card, pill or chip to explore
+          ⚡ 26 modules with verified architectural deep dives · Click any card, pill or chip to explore
         </div>
       </div>
     </div><!-- /view-dais-stack -->
@@ -881,6 +1135,243 @@ function renderSimulation(container, simType, mod) {
         </div>
         <div style="font-size:11.5px;color:var(--dais-ink3);text-align:center;">
           Grounded by Genie Ontology & governed by Unity Catalog row/column permissions.
+        </div>
+      </div>
+    `;
+  } else if (simType === 'deltalake') {
+    container.innerHTML = `
+      <div class="sim-header">
+        <div class="sim-label">⚡ Live Simulation · UniForm Zero-Copy Multi-Format Reader</div>
+        <div class="sim-controls">
+          <button class="sim-btn active" id="sim-fmt-delta">Delta Lake</button>
+          <button class="sim-btn" id="sim-fmt-iceberg">Iceberg Metadata</button>
+          <button class="sim-btn" id="sim-fmt-hudi">Hudi Metadata</button>
+        </div>
+      </div>
+      <div style="background:#121a28;border:1px solid #22304a;border-radius:10px;padding:14px;">
+        <div id="sim-fmt-display" style="font-family:monospace;font-size:12px;color:#eef3fb;line-height:1.6;">
+          <div style="color:var(--dais-lava2);">// Physical Storage: Single Parquet File Set (Zero Duplication)</div>
+          <div>s3://lakehouse-data/sales/part-00000.snappy.parquet (2.4 GB)</div>
+          <div style="color:var(--dais-good);margin-top:6px;">// Delta Log Commit: _delta_log/00000000000000000042.json</div>
+          <div>{"commitInfo":{"timestamp":1789420000,"operation":"MERGE","isolationLevel":"WriteSerializable"}}</div>
+        </div>
+      </div>
+      <div style="font-size:11.5px;color:var(--dais-ink3);margin-top:8px;text-align:center;">
+        UniForm generates Iceberg and Hudi metadata pointers on commit — zero data copying, 100% ACID.
+      </div>
+    `;
+
+    const bDelta = container.querySelector('#sim-fmt-delta');
+    const bIce = container.querySelector('#sim-fmt-iceberg');
+    const bHudi = container.querySelector('#sim-fmt-hudi');
+    const disp = container.querySelector('#sim-fmt-display');
+    const setFmt = (btn, text) => {
+      [bDelta, bIce, bHudi].forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      disp.innerHTML = text;
+    };
+    bDelta.addEventListener('click', () => setFmt(bDelta, `
+      <div style="color:var(--dais-lava2);">// Native Delta Lake Reader (Spark / Photon / SQL Warehouse)</div>
+      <div>SELECT * FROM delta.\`s3://lakehouse-data/sales\` WHERE region = 'US-EAST';</div>
+      <div style="color:var(--dais-good);margin-top:6px;">// Delta ACID Log: Multi-Version Concurrency (MVCC) Active</div>
+      <div>Status: 100% ACID Serializable Snapshot read in 12ms via Photon vector engine</div>
+    `));
+    bIce.addEventListener('click', () => setFmt(bIce, `
+      <div style="color:var(--dais-cyan);">// Apache Iceberg Reader (Snowflake / Trino / BigQuery)</div>
+      <div>SELECT * FROM iceberg_catalog.sales WHERE region = 'US-EAST';</div>
+      <div style="color:var(--dais-good);margin-top:6px;">// Iceberg Metadata Generated by UniForm:</div>
+      <div>metadata/v42.metadata.json -> Points directly to shared Delta Parquet data! (0 bytes copied)</div>
+    `));
+    bHudi.addEventListener('click', () => setFmt(bHudi, `
+      <div style="color:var(--dais-amber);">// Apache Hudi Reader (Legacy Analytics Systems)</div>
+      <div>SELECT * FROM hudi_ro_table WHERE region = 'US-EAST';</div>
+      <div style="color:var(--dais-good);margin-top:6px;">// Hudi .hoodie Commit Timeline:</div>
+      <div>.hoodie/20260615120000.commit -> Referenced Parquet files shared with Delta Lake</div>
+    `));
+  } else if (simType === 'iceberg') {
+    container.innerHTML = `
+      <div class="sim-header">
+        <div class="sim-label">⚡ Live Simulation · Unity Catalog Iceberg REST Catalog API</div>
+      </div>
+      <div style="background:#121a28;border:1px solid #22304a;border-radius:10px;padding:14px;font-family:monospace;font-size:12px;line-height:1.6;color:#eef3fb;">
+        <div style="color:var(--dais-cyan);">GET /v1/catalogs/unity/namespaces/analytics/tables/customers</div>
+        <div style="color:#94a3b8;margin-top:6px;">{</div>
+        <div style="padding-left:14px;">"metadata-location": "s3://corp-lake/metadata/0001-iceberg.metadata.json",</div>
+        <div style="padding-left:14px;">"format-version": 2,</div>
+        <div style="padding-left:14px;color:var(--dais-good);">"table-governance": "Unity Catalog Enforced (Row Filters + Column Masking)"</div>
+        <div style="color:#94a3b8;">}</div>
+      </div>
+      <div style="font-size:11.5px;color:var(--dais-ink3);margin-top:8px;text-align:center;">
+        External query engines read Unity Catalog tables as native Apache Iceberg tables without credential vending risks.
+      </div>
+    `;
+  } else if (simType === 'anycloud') {
+    container.innerHTML = `
+      <div class="sim-header">
+        <div class="sim-label">⚡ Live Simulation · Multi-Cloud Unified Fabric</div>
+        <div class="sim-controls">
+          <button class="sim-btn active" id="sim-mc-all">All 3 Clouds</button>
+          <button class="sim-btn" id="sim-mc-aws">AWS (us-east-1)</button>
+          <button class="sim-btn" id="sim-mc-azure">Azure (eastus)</button>
+          <button class="sim-btn" id="sim-mc-gcp">GCP (us-central1)</button>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+        <div style="background:#141e2e;padding:12px;border-radius:8px;border:1px solid #243550;text-align:center;">
+          <div style="font-size:12px;font-weight:700;color:#f59e0b;">AWS S3</div>
+          <div style="font-size:11px;color:#94a3b8;margin-top:4px;">us-east-1</div>
+          <div style="font-size:10px;color:#34d399;margin-top:6px;">● Active Replicas</div>
+        </div>
+        <div style="background:#141e2e;padding:12px;border-radius:8px;border:1px solid #243550;text-align:center;">
+          <div style="font-size:12px;font-weight:700;color:#0ea5e9;">Azure ADLS Gen2</div>
+          <div style="font-size:11px;color:#94a3b8;margin-top:4px;">eastus</div>
+          <div style="font-size:10px;color:#34d399;margin-top:6px;">● Zero-Copy Mirror</div>
+        </div>
+        <div style="background:#141e2e;padding:12px;border-radius:8px;border:1px solid #243550;text-align:center;">
+          <div style="font-size:12px;font-weight:700;color:#ec4899;">Google GCS</div>
+          <div style="font-size:11px;color:#94a3b8;margin-top:4px;">us-central1</div>
+          <div style="font-size:10px;color:#34d399;margin-top:6px;">● Federated Access</div>
+        </div>
+      </div>
+      <div style="font-size:11.5px;color:var(--dais-ink3);margin-top:10px;text-align:center;">
+        Single Unity Catalog metastore manages unified governance across AWS, Azure, and Google Cloud with 0 egress lock-in.
+      </div>
+    `;
+  } else if (simType === 'anymodel') {
+    container.innerHTML = `
+      <div class="sim-header">
+        <div class="sim-label">⚡ Live Simulation · Mosaic AI Gateway Model Router</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div style="background:#131c2a;border:1px solid #24344d;border-radius:8px;padding:10px;">
+            <div style="font-size:11px;color:var(--dais-ink3);text-transform:uppercase;">Frontier API Models</div>
+            <div style="font-size:13px;font-weight:700;color:#fff;margin-top:4px;">OpenAI GPT-4o · Claude 3.5 Sonnet</div>
+            <div style="font-size:10px;color:var(--dais-good);margin-top:2px;">Rate-limited & spend capped at $5K/mo</div>
+          </div>
+          <div style="background:#131c2a;border:1px solid #24344d;border-radius:8px;padding:10px;">
+            <div style="font-size:11px;color:var(--dais-ink3);text-transform:uppercase;">Open Weights & Custom</div>
+            <div style="font-size:13px;font-weight:700;color:#fff;margin-top:4px;">Meta Llama 3 70B · DBRX · Custom</div>
+            <div style="font-size:10px;color:var(--dais-cyan);margin-top:2px;">Private GPU serving inside customer VPC</div>
+          </div>
+        </div>
+        <div style="background:#0c121b;padding:10px 12px;border-radius:8px;font-family:monospace;font-size:11px;color:#38bdf8;">
+          mlflow.deployments.get_deploy_client("databricks").predict(endpoint="enterprise-router", inputs={"prompt": "..."})
+        </div>
+      </div>
+    `;
+  } else if (simType === 'anydata') {
+    container.innerHTML = `
+      <div class="sim-header">
+        <div class="sim-label">⚡ Live Simulation · Multimodal Lakehouse Indexing</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center;">
+        <div style="background:#131c2a;border:1px solid #24344d;padding:10px;border-radius:8px;">
+          <div style="font-size:16px;">📊</div>
+          <div style="font-size:11px;font-weight:700;color:#fff;margin-top:4px;">Structured</div>
+          <div style="font-size:10px;color:#94a3b8;">Delta Tables</div>
+        </div>
+        <div style="background:#131c2a;border:1px solid #24344d;padding:10px;border-radius:8px;">
+          <div style="font-size:16px;">⚡</div>
+          <div style="font-size:11px;font-weight:700;color:#fff;margin-top:4px;">Streaming</div>
+          <div style="font-size:10px;color:#94a3b8;">Kafka & CDC</div>
+        </div>
+        <div style="background:#131c2a;border:1px solid #24344d;padding:10px;border-radius:8px;">
+          <div style="font-size:16px;">📄</div>
+          <div style="font-size:11px;font-weight:700;color:#fff;margin-top:4px;">Unstructured</div>
+          <div style="font-size:10px;color:#94a3b8;">PDFs, Audio, Vid</div>
+        </div>
+        <div style="background:#131c2a;border:1px solid #24344d;padding:10px;border-radius:8px;">
+          <div style="font-size:16px;">🧠</div>
+          <div style="font-size:11px;font-weight:700;color:#fff;margin-top:4px;">Vectors</div>
+          <div style="font-size:10px;color:#94a3b8;">Vector Search</div>
+        </div>
+      </div>
+      <div style="font-size:11.5px;color:var(--dais-ink3);margin-top:10px;text-align:center;">
+        Unity Catalog Volumes govern all unstructured files alongside structured Delta Lake tables.
+      </div>
+    `;
+  } else if (simType === 'apps') {
+    container.innerHTML = `
+      <div class="sim-header">
+        <div class="sim-label">⚡ Live Simulation · Databricks Apps Serverless Container Deployment</div>
+      </div>
+      <div style="background:#111927;border:1px solid #223249;border-radius:10px;padding:12px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;border-bottom:1px solid #1f2d42;padding-bottom:8px;">
+          <span style="font-size:12px;font-weight:700;color:#fff;">🚀 Application: revenue-forecasting-app</span>
+          <span style="font-size:10.5px;background:#065f46;color:#6ee7b7;padding:2px 8px;border-radius:12px;font-weight:600;">Status: Healthy (Serverless)</span>
+        </div>
+        <div style="font-family:monospace;font-size:11.5px;color:#94a3b8;line-height:1.6;">
+          <div>App Framework: <span style="color:#fff;">Streamlit + Python 3.11</span></div>
+          <div>Runtime: <span style="color:#38bdf8;">Micro-VM Serverless Container (Cold boot: 480ms)</span></div>
+          <div>Authentication: <span style="color:#34d399;">Automatic Workspace SSO & Unity Catalog RBAC</span></div>
+          <div>Data Connection: <span style="color:#fbbf24;">Serverless SQL Warehouse (Zero credentials in code)</span></div>
+        </div>
+      </div>
+    `;
+  } else if (simType === 'lakebase') {
+    container.innerHTML = `
+      <div class="sim-header">
+        <div class="sim-label">⚡ Live Simulation · Lakebase Serverless Postgres + Bidirectional Delta Mirror</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div style="background:#121a28;border:1px solid #22304a;border-radius:8px;padding:10px;font-family:monospace;font-size:11px;color:#e2e8f0;">
+          <div style="color:var(--dais-lava2);font-weight:700;">-- Operational OLTP Write</div>
+          <div>INSERT INTO lakebase.agent_memory</div>
+          <div>(session_id, user_id, state)</div>
+          <div>VALUES ('s_902', 'u_44', '{...}');</div>
+          <div style="color:var(--dais-good);margin-top:4px;">-- Latency: 0.8ms (ACID committed)</div>
+        </div>
+        <div style="background:#121a28;border:1px solid #22304a;border-radius:8px;padding:10px;font-family:monospace;font-size:11px;color:#e2e8f0;">
+          <div style="color:var(--dais-cyan);font-weight:700;">-- Zero-ETL Delta Lake Mirror</div>
+          <div>SELECT * FROM delta.agent_memory</div>
+          <div>WHERE session_id = 's_902';</div>
+          <div style="color:var(--dais-good);margin-top:4px;">-- Sync lag: 0.0 sec (Real-time analytics ready)</div>
+        </div>
+      </div>
+    `;
+  } else if (simType === 'geniecode') {
+    container.innerHTML = `
+      <div class="sim-header">
+        <div class="sim-label">⚡ Live Simulation · Assistant Code Generation & 1-Click Error Diagnostics</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="background:#221518;border-left:3px solid #ef4444;padding:8px 12px;border-radius:6px;font-family:monospace;font-size:11.5px;color:#fca5a5;">
+          ❌ AnalysisException: Column 'revnue' not found in table 'orders'. Did you mean 'revenue'?
+        </div>
+        <div style="background:#0d1829;border-left:3px solid #38bdf8;padding:8px 12px;border-radius:6px;font-family:monospace;font-size:11.5px;color:#93c5fd;">
+          💡 <b>Assistant Fix (1-Click applied):</b> Corrected typo 'revnue' -> 'revenue' and added Photon vectorized group-by optimization.
+        </div>
+      </div>
+    `;
+  } else if (simType === 'secureconnect') {
+    container.innerHTML = `
+      <div class="sim-header">
+        <div class="sim-label">⚡ Live Simulation · SecureConnect Private Zero-Trust Tunnel</div>
+      </div>
+      <div style="background:#121a28;border:1px solid #22304a;border-radius:10px;padding:12px;font-family:monospace;font-size:11.5px;color:#eef3fb;line-height:1.6;">
+        <div>[Databricks Serverless Compute] ──── <span style="color:#34d399">PrivateLink / mTLS Tunnel</span> ──── [On-Prem Enterprise Oracle]</div>
+        <div style="color:#94a3b8;margin-top:6px;">• Public Internet Transit: <span style="color:#ef4444;">BLOCKED (0 public IP footprint)</span></div>
+        <div style="color:#94a3b8;">• Network Path: <span style="color:#34d399;">Direct VPC Peering & Customer Private Subnet</span></div>
+      </div>
+    `;
+  } else if (simType === 'aibi_dashboards') {
+    container.innerHTML = `
+      <div class="sim-header">
+        <div class="sim-label">⚡ Live Simulation · AI/BI Interactive Dashboard Metrics</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+        <div style="background:#131c2a;border:1px solid #24344d;padding:10px;border-radius:8px;text-align:center;">
+          <div style="font-size:10.5px;color:#94a3b8;">TOTAL LAKEHOUSE DATA</div>
+          <div style="font-size:18px;font-weight:700;color:#38bdf8;margin-top:2px;">14.2 PB</div>
+        </div>
+        <div style="background:#131c2a;border:1px solid #24344d;padding:10px;border-radius:8px;text-align:center;">
+          <div style="font-size:10.5px;color:#94a3b8;">QUERIES / DAY</div>
+          <div style="font-size:18px;font-weight:700;color:#34d399;margin-top:2px;">2.8M</div>
+        </div>
+        <div style="background:#131c2a;border:1px solid #24344d;padding:10px;border-radius:8px;text-align:center;">
+          <div style="font-size:10.5px;color:#94a3b8;">GENIE Q&A ACCURACY</div>
+          <div style="font-size:18px;font-weight:700;color:#f59e0b;margin-top:2px;">99.4%</div>
         </div>
       </div>
     `;
