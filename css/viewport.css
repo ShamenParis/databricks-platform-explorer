@@ -230,3 +230,62 @@
   display: inline-block;
   animation: pulse-dot 2.5s ease-in-out infinite;
 }
+
+/* ── Responsive Viewport ─────────────────────────────────── */
+@media (max-width: 960px) {
+  .scene-heading {
+    top: 48px;
+    left: 12px;
+  }
+  .scene-heading h1 {
+    font-size: 16px;
+  }
+  .scene-subtitle {
+    display: none;
+  }
+  .breadcrumbs {
+    font-size: 10px;
+  }
+  .view-tools {
+    top: 48px;
+    right: 10px;
+    gap: 4px;
+  }
+  .view-tools .icon-btn {
+    width: 32px;
+    height: 32px;
+  }
+  .bottom-controls {
+    padding: 8px 12px;
+    justify-content: center;
+  }
+  .gesture-hints {
+    display: none;
+  }
+  .scene-legend {
+    display: none;
+  }
+  .assembly-controls {
+    gap: 8px;
+  }
+  .separation-wrap input[type="range"] {
+    width: 65px;
+  }
+  .separation-wrap label {
+    display: none;
+  }
+}
+
+@media (max-width: 540px) {
+  .assembly-controls {
+    gap: 6px;
+  }
+  .segmented button {
+    padding: 4px 10px;
+    font-size: 11px;
+  }
+  .sep-value {
+    font-size: 11px;
+    min-width: 26px;
+  }
+}

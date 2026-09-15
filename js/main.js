@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initHelpDialog();
   initPatternsPage();
   initDaisArch();
+  initMobileDrawers();
   setStatusDate();
 
   // Initialize 3D scene engine
@@ -142,12 +143,14 @@ function handleSceneSelect(sel) {
       showLayerDetail(sel.id);
       setActiveLayerSilent(sel.id);
       if (layer) updateSceneHeading(layer.name.toUpperCase(), layer.name, layer.shortDesc);
+      openMobileInspector(layer?.name);
     } else if (sel.type === 'component') {
       const comp = COMPONENT_MAP[sel.id];
       showCompDetail(sel.id);
       if (comp) {
         setActiveCompSilent(sel.id, comp.layerId);
         updateSceneHeading(comp.layerName.toUpperCase(), comp.name, comp.subtitle || '');
+        openMobileInspector(comp.name);
       }
     }
   } finally {
@@ -186,6 +189,8 @@ function handleNavLayerClick(layerId) {
     highlightMatrixLayer(layerId);
     scrollMatrixTo(`.matrix-layer[data-layer-id="${layerId}"]`);
     if (layer) updateSceneHeading(layer.name.toUpperCase(), layer.name, layer.shortDesc);
+    closeMobileSidebar();
+    openMobileInspector(layer?.name);
   } finally {
     _selecting = false;
   }
@@ -205,6 +210,8 @@ function handleNavCompClick(compId, layerId) {
     highlightMatrixComponent(compId);
     scrollMatrixTo(`#mcard-${compId}`);
     if (comp) updateSceneHeading(comp.layerName.toUpperCase(), comp.name, comp.subtitle || '');
+    closeMobileSidebar();
+    openMobileInspector(comp?.name);
   } finally {
     _selecting = false;
   }
@@ -224,6 +231,7 @@ document.addEventListener('inspector:selectComp', (e) => {
     if (comp) {
       setActiveCompSilent(compId, comp.layerId);
       updateSceneHeading(comp.layerName.toUpperCase(), comp.name, comp.subtitle || '');
+      openMobileInspector(comp.name);
     }
   } finally {
     _selecting = false;
@@ -258,19 +266,32 @@ function switchView(view) {
   });
 
   const workspace = document.getElementById('main-workspace');
+  const mobToggle = document.getElementById('mobile-sidebar-toggle');
+  const floatBtn = document.getElementById('mobile-floating-detail-btn');
+
+  // Close any open mobile drawers when switching views
+  closeMobileSidebar();
+  closeMobileInspector();
 
   if (view === 'explorer') {
-    // Restore 3-column grid for the explorer
-    workspace.style.display = 'grid';
+    // Restore grid / flex for the explorer
+    if (window.innerWidth > 960) {
+      workspace.style.display = 'grid';
+    } else {
+      workspace.style.display = 'flex';
+    }
     document.getElementById('explorer-panel').style.display = 'contents';
     document.getElementById('architecture-panel').style.display = 'none';
     document.getElementById('patterns-panel').style.display = 'none';
+    if (mobToggle) mobToggle.style.display = '';
   } else {
     // Full-width single column for page views
     workspace.style.display = 'block';
     document.getElementById('explorer-panel').style.display = 'none';
     document.getElementById('architecture-panel').style.display = view === 'architecture' ? 'block' : 'none';
     document.getElementById('patterns-panel').style.display = view === 'patterns' ? 'block' : 'none';
+    if (mobToggle) mobToggle.style.display = 'none';
+    if (floatBtn) floatBtn.style.display = 'none';
     // Make page views scrollable
     ['architecture-panel', 'patterns-panel'].forEach(id => {
       const el = document.getElementById(id);
@@ -461,4 +482,90 @@ function setStatusDate() {
     const d = new Date();
     el.textContent = d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
   }
+}
+
+// ── Mobile Drawer Controllers ──────────────────────────────
+export function openMobileInspector(compName) {
+  if (window.innerWidth > 960) return;
+  const inspector = document.getElementById('inspector');
+  const backdrop = document.getElementById('mobile-drawer-backdrop');
+  const sidebar = document.getElementById('sidebar');
+  const floatBtn = document.getElementById('mobile-floating-detail-btn');
+  const nameEl = document.getElementById('mobile-floating-comp-name');
+
+  inspector?.classList.add('mobile-open');
+  backdrop?.classList.add('visible');
+  sidebar?.classList.remove('mobile-open');
+
+  if (floatBtn && compName) {
+    if (nameEl) nameEl.textContent = compName;
+    floatBtn.style.display = 'inline-flex';
+  }
+}
+
+export function closeMobileInspector() {
+  const inspector = document.getElementById('inspector');
+  const backdrop = document.getElementById('mobile-drawer-backdrop');
+  const sidebar = document.getElementById('sidebar');
+
+  inspector?.classList.remove('mobile-open');
+  if (!sidebar?.classList.contains('mobile-open')) {
+    backdrop?.classList.remove('visible');
+  }
+}
+
+export function openMobileSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('mobile-drawer-backdrop');
+  const inspector = document.getElementById('inspector');
+
+  sidebar?.classList.add('mobile-open');
+  backdrop?.classList.add('visible');
+  inspector?.classList.remove('mobile-open');
+}
+
+export function closeMobileSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('mobile-drawer-backdrop');
+  const inspector = document.getElementById('inspector');
+
+  sidebar?.classList.remove('mobile-open');
+  if (!inspector?.classList.contains('mobile-open')) {
+    backdrop?.classList.remove('visible');
+  }
+}
+
+function initMobileDrawers() {
+  const toggleBtn = document.getElementById('mobile-sidebar-toggle');
+  const sidebar = document.getElementById('sidebar');
+  const sidebarClose = document.getElementById('sidebar-close-btn');
+  const inspectorClose = document.getElementById('inspector-close-btn');
+  const backdrop = document.getElementById('mobile-drawer-backdrop');
+  const floatBtn = document.getElementById('mobile-floating-detail-btn');
+
+  toggleBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (sidebar?.classList.contains('mobile-open')) {
+      closeMobileSidebar();
+    } else {
+      openMobileSidebar();
+    }
+  });
+
+  sidebarClose?.addEventListener('click', closeMobileSidebar);
+  inspectorClose?.addEventListener('click', closeMobileInspector);
+  floatBtn?.addEventListener('click', () => openMobileInspector());
+
+  backdrop?.addEventListener('click', () => {
+    closeMobileSidebar();
+    closeMobileInspector();
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 960) {
+      closeMobileSidebar();
+      closeMobileInspector();
+      if (floatBtn) floatBtn.style.display = 'none';
+    }
+  });
 }

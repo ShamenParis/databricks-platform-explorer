@@ -130,6 +130,100 @@
   grid-template-columns: var(--sidebar-w) 1fr var(--inspector-w);
   overflow: hidden;
   min-height: 0;
+  position: relative;
+}
+
+/* ── Mobile Navigation & Drawer Controls ─────────────────── */
+.mobile-nav-btn {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-glass-light);
+  border: var(--glass-border);
+  color: var(--text-primary);
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all var(--duration-fast);
+}
+.mobile-nav-btn:hover, .mobile-nav-btn:active {
+  background: rgba(255, 54, 33, 0.15);
+  border-color: rgba(255, 54, 33, 0.4);
+  color: #fff;
+}
+
+.drawer-close-btn {
+  display: none;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 18px;
+  line-height: 1;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--duration-fast);
+  flex-shrink: 0;
+}
+.drawer-close-btn:hover {
+  background: rgba(255, 54, 33, 0.3);
+  border-color: var(--brand-red);
+}
+
+.mobile-drawer-handle {
+  display: none;
+  width: 36px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 99px;
+  margin: 10px auto 4px;
+  flex-shrink: 0;
+}
+
+/* ── Mobile Backdrop ─────────────────────────────────────── */
+.mobile-drawer-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 190;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+.mobile-drawer-backdrop.visible {
+  display: block;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ── Floating Mobile Inspector Trigger ──────────────────── */
+.mobile-floating-detail-btn {
+  display: none;
+  position: fixed;
+  bottom: calc(var(--statusbar-h) + 12px);
+  right: 14px;
+  z-index: 50;
+  align-items: center;
+  gap: 8px;
+  background: #ff3621;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 99px;
+  padding: 10px 18px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(255, 54, 33, 0.45);
+  animation: bounce-subtle 3s ease-in-out infinite;
 }
 
 /* ── Status bar ─────────────────────────────────────────── */
@@ -159,4 +253,171 @@
 
 /* ── View panels — display managed entirely by main.js ──── */
 .view-panel { display: none; }
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE MEDIA QUERIES (TABLET & MOBILE)
+   ═══════════════════════════════════════════════════════════ */
+
+@media (max-width: 960px) {
+  .topbar {
+    padding: 0 10px;
+    gap: 8px;
+    height: 52px;
+  }
+  .mobile-nav-btn {
+    display: inline-flex;
+  }
+  .drawer-close-btn {
+    display: inline-flex;
+  }
+  .mobile-drawer-handle {
+    display: block;
+  }
+  .brand-name {
+    font-size: 15px;
+  }
+  .brand-caption {
+    display: none;
+  }
+  .view-tabs {
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: calc(100vw - 200px);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 2px;
+    gap: 4px;
+    flex-shrink: 1;
+  }
+  .view-tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .view-tab {
+    padding: 5px 10px;
+    font-size: 11.5px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* Single Column Workspace for Mobile */
+  .workspace {
+    display: flex !important;
+    flex-direction: column;
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Left Sidebar as Off-Canvas Slide Drawer */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    height: 100dvh;
+    max-height: 100dvh;
+    width: min(320px, 86vw);
+    z-index: 200;
+    background: #090e1a;
+    border-right: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 10px 0 40px rgba(0, 0, 0, 0.85);
+    transform: translateX(-100%);
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    padding-top: max(8px, env(safe-area-inset-top));
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  /* Central Viewport takes full screen */
+  .viewport {
+    width: 100%;
+    height: 100%;
+    flex: 1;
+    min-height: 0;
+  }
+
+  /* Right Inspector as Slide-Up Bottom Sheet */
+  .inspector {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-height: 85vh;
+    z-index: 200;
+    background: #0a1120;
+    border-radius: 20px 20px 0 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    border-left: none;
+    box-shadow: 0 -12px 48px rgba(0, 0, 0, 0.9);
+    transform: translateY(100%);
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+  .inspector.mobile-open {
+    transform: translateY(0);
+  }
+  .mobile-floating-detail-btn {
+    display: inline-flex;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --topbar-h: 50px;
+    --statusbar-h: 28px;
+  }
+  .topbar {
+    padding: 0 8px;
+    gap: 6px;
+  }
+  .help-label {
+    display: none;
+  }
+  .help-btn {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+  .mob-btn-text {
+    display: none;
+  }
+  .mobile-nav-btn {
+    padding: 5px 8px;
+    min-width: 32px;
+  }
+  .brand-icon {
+    width: 22px;
+    height: 22px;
+  }
+  .view-tabs {
+    max-width: calc(100vw - 120px);
+    gap: 3px;
+  }
+  .view-tab {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+  .statusbar {
+    padding: 0 10px;
+    font-size: 10px;
+  }
+  .statusbar span:last-child {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand-name {
+    display: none;
+  }
+  .view-tabs {
+    max-width: calc(100vw - 90px);
+  }
+  .view-tab {
+    padding: 4px 6px;
+    font-size: 10.5px;
+  }
+}
 

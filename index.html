@@ -11,15 +11,15 @@
   <meta name="theme-color" content="#080e1c">
 
   <!-- Design system -->
-  <link rel="stylesheet" href="css/variables.css">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/sidebar.css">
-  <link rel="stylesheet" href="css/viewport.css">
-  <link rel="stylesheet" href="css/inspector.css">
-  <link rel="stylesheet" href="css/animations.css">
-  <link rel="stylesheet" href="css/dais-arch.css">
-  <link rel="stylesheet" href="css/matrix-view.css">
+  <link rel="stylesheet" href="css/variables.css?v=mob1">
+  <link rel="stylesheet" href="css/base.css?v=mob1">
+  <link rel="stylesheet" href="css/layout.css?v=mob1">
+  <link rel="stylesheet" href="css/sidebar.css?v=mob1">
+  <link rel="stylesheet" href="css/viewport.css?v=mob1">
+  <link rel="stylesheet" href="css/inspector.css?v=mob1">
+  <link rel="stylesheet" href="css/animations.css?v=mob1">
+  <link rel="stylesheet" href="css/dais-arch.css?v=mob1">
+  <link rel="stylesheet" href="css/matrix-view.css?v=mob1">
 
   <!-- Three.js via importmap -->
   <script type="importmap">
@@ -94,18 +94,7 @@
     /* Prevent scroll on explorer view */
     #explorer-panel { display: contents; }
 
-    /* Responsive tweaks */
-    @media (max-width: 900px) {
-      :root {
-        --sidebar-w: 220px;
-        --inspector-w: 240px;
-      }
-    }
-    @media (max-width: 660px) {
-      .workspace { grid-template-columns: 1fr; }
-      .sidebar, .inspector { display: none; }
-      .view-tabs { display: none; }
-    }
+    /* Legacy override removed to enable responsive drawers and tabs in css/layout.css */
   </style>
 </head>
 
@@ -114,6 +103,11 @@
 
   <!-- ── TOP BAR ─────────────────────────────────────────── -->
   <header class="topbar" role="banner">
+    <button class="mobile-nav-btn" id="mobile-sidebar-toggle" aria-label="Open Navigation Layers" title="Layers & Components">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      <span class="mob-btn-text">Layers</span>
+    </button>
+
     <a class="brand" href="#" aria-label="Databricks Platform Explorer home">
       <svg class="brand-icon" viewBox="0 0 32 32" aria-hidden="true">
         <path d="m16 3 13 6.5L16 16 3 9.5 16 3Z"/>
@@ -140,8 +134,8 @@
     </nav>
 
     <div class="topbar-end">
-      <button class="help-btn" id="help-btn" aria-haspopup="dialog">
-        How to explore <span class="help-key">?</span>
+      <button class="help-btn" id="help-btn" aria-haspopup="dialog" aria-label="Help">
+        <span class="help-label">How to explore</span> <span class="help-key">?</span>
       </button>
     </div>
   </header>
@@ -155,11 +149,14 @@
     <div class="view-panel" id="explorer-panel" data-panel="explorer">
 
       <!-- LEFT SIDEBAR -->
-      <aside class="sidebar" aria-label="Architecture navigation">
+      <aside class="sidebar" id="sidebar" aria-label="Architecture navigation">
         <div class="sidebar-header">
           <div class="sidebar-label">
-            ARCHITECTURE
-            <span class="component-count" id="component-count"></span>
+            <span>ARCHITECTURE</span>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="component-count" id="component-count"></span>
+              <button class="drawer-close-btn" id="sidebar-close-btn" aria-label="Close navigation">&times;</button>
+            </div>
           </div>
           <button class="overview-btn" id="overview-btn" aria-current="true">
             <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -300,12 +297,23 @@
 
       <!-- RIGHT INSPECTOR -->
       <aside class="inspector" id="inspector" aria-label="Component details">
+        <div class="mobile-drawer-handle" aria-hidden="true"></div>
         <div class="inspector-header">
           <span class="inspector-eyebrow">FIELD GUIDE</span>
           <span class="discovery-count" id="discovery-count" aria-live="polite">0 explored</span>
+          <button class="drawer-close-btn" id="inspector-close-btn" aria-label="Close component details">&times;</button>
         </div>
         <div class="inspector-scroll" id="detail-content"></div>
       </aside>
+
+      <!-- Mobile Floating Details Reopen Button -->
+      <button class="mobile-floating-detail-btn" id="mobile-floating-detail-btn" aria-label="Open component details" style="display:none;">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        <span id="mobile-floating-comp-name">Field Guide</span>
+      </button>
+
+      <!-- Mobile Drawer Backdrop -->
+      <div class="mobile-drawer-backdrop" id="mobile-drawer-backdrop"></div>
 
     </div><!-- /explorer-panel -->
 
