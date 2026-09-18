@@ -50,9 +50,9 @@ let sepMultiplier = 1.0;
 const STACK_LAYERS = LAYERS.filter(l => l.isStack).sort((a, b) => a.stackLevel - b.stackLevel);
 
 // Default camera anchors
-const ISO_CAM_POS  = new THREE.Vector3(0, 13, 17);
-const ISO_CAM_TGT  = new THREE.Vector3(0, -0.4, 0);
-const TOP_CAM_POS  = new THREE.Vector3(0, 20, 0.001);
+const ISO_CAM_POS  = new THREE.Vector3(0, 14.5, 18.5);
+const ISO_CAM_TGT  = new THREE.Vector3(0, 0.4, 0);
+const TOP_CAM_POS  = new THREE.Vector3(0, 22, 0.001);
 const TOP_CAM_TGT  = new THREE.Vector3(0, 0, 0);
 
 // Raycaster for mouse picking

@@ -25,11 +25,28 @@
   pointer-events: none;
 }
 
+/* ── Top Header Dock (Mode Switcher + Camera ISO/TOP) ────── */
+.viewport-header-dock {
+  position: absolute;
+  top: 14px;
+  left: 18px;
+  right: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  z-index: 25;
+  pointer-events: none;
+}
+.viewport-header-dock > * {
+  pointer-events: auto;
+}
+
 /* ── Scene heading ───────────────────────────────────────── */
 .scene-heading {
   position: absolute;
-  top: var(--space-5);
-  left: var(--space-6);
+  top: 68px;
+  left: 20px;
   z-index: 4;
   pointer-events: none;
 }
@@ -116,8 +133,8 @@
 /* ── View tool buttons ───────────────────────────────────── */
 .view-tools {
   position: absolute;
-  top: var(--space-5);
-  right: var(--space-5);
+  top: 68px;
+  right: 18px;
   z-index: 5;
   display: flex;
   flex-direction: column;
@@ -137,11 +154,12 @@
   position: absolute;
   bottom: 0;
   left: 0; right: 0;
+  height: 52px;
   z-index: 5;
-  padding: var(--space-4) var(--space-6);
-  background: linear-gradient(to top, rgba(8,14,28,0.9) 0%, transparent 100%);
+  padding: 0 var(--space-6);
+  background: linear-gradient(to top, rgba(8,14,28,0.95) 0%, rgba(8,14,28,0.6) 60%, transparent 100%);
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
 }
 
@@ -212,15 +230,13 @@
 
 /* ── Scene legend ─────────────────────────────────────────── */
 .scene-legend {
-  position: absolute;
-  bottom: 60px;
-  left: var(--space-6);
+  position: static;
   z-index: 4;
   font-size: var(--text-xs);
   color: var(--text-muted);
   display: flex;
   align-items: center;
-  gap: var(--space-1);
+  gap: var(--space-2);
   pointer-events: none;
 }
 .legend-dot {
@@ -233,30 +249,37 @@
 
 /* ── Responsive Viewport ─────────────────────────────────── */
 @media (max-width: 960px) {
+  .viewport-header-dock {
+    top: 8px;
+    left: 10px;
+    right: 10px;
+    gap: 8px;
+  }
   .scene-heading {
-    top: 48px;
-    left: 12px;
+    top: 52px;
+    left: 10px;
   }
   .scene-heading h1 {
-    font-size: 16px;
+    font-size: 15px;
   }
   .scene-subtitle {
     display: none;
   }
   .breadcrumbs {
-    font-size: 10px;
+    font-size: 9.5px;
   }
   .view-tools {
-    top: 48px;
+    top: 52px;
     right: 10px;
-    gap: 4px;
+    gap: 3px;
   }
   .view-tools .icon-btn {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
   }
   .bottom-controls {
-    padding: 8px 12px;
+    height: 48px;
+    padding: 0 10px;
     justify-content: center;
   }
   .gesture-hints {
@@ -277,6 +300,19 @@
 }
 
 @media (max-width: 540px) {
+  .viewport-header-dock {
+    top: 6px;
+    left: 6px;
+    right: 6px;
+  }
+  .scene-heading {
+    top: 48px;
+    left: 8px;
+  }
+  .view-tools {
+    top: 48px;
+    right: 6px;
+  }
   .assembly-controls {
     gap: 6px;
   }

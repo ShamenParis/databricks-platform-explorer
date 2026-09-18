@@ -193,6 +193,24 @@
 
       <!-- CENTRAL VIEWPORT -->
       <section class="viewport" aria-label="Interactive 3D architecture">
+        <!-- Top header dock: Mode switcher on left & ISO/TOP toggles on right -->
+        <div class="viewport-header-dock">
+          <div class="viewport-mode-bar">
+            <button class="vmode-btn active" id="btn-mode-2d">
+              <span>🗺️</span> 2D Architecture Matrix <span class="vmode-badge">Recommended</span>
+            </button>
+            <button class="vmode-btn" id="btn-mode-3d">
+              <span>🧊</span> 3D Layer Stack
+            </button>
+          </div>
+
+          <!-- Camera Angles (ISO / TOP in 3D Mode) -->
+          <div class="cam-mode-bar" id="cam-mode-bar" style="display:none;">
+            <button class="cam-btn active" id="btn-cam-iso" title="Isometric 3D perspective">ISO</button>
+            <button class="cam-btn" id="btn-cam-top" title="Top-down 2D architecture view">TOP</button>
+          </div>
+        </div>
+
         <!-- Heading overlay -->
         <div class="scene-heading">
           <div class="breadcrumbs" id="breadcrumbs">
@@ -219,22 +237,6 @@
           <button class="icon-btn" id="zoom-out" title="Zoom out" aria-label="Zoom out">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg>
           </button>
-        </div>
-
-        <!-- Mode Switcher: 2D Architecture Matrix (Default) vs 3D Board -->
-        <div class="viewport-mode-bar">
-          <button class="vmode-btn active" id="btn-mode-2d">
-            <span>🗺️</span> 2D Architecture Matrix <span class="vmode-badge">Recommended</span>
-          </button>
-          <button class="vmode-btn" id="btn-mode-3d">
-            <span>🧊</span> 3D Layer Stack
-          </button>
-        </div>
-
-        <!-- Camera Angles (ISO / TOP in 3D Mode) -->
-        <div class="cam-mode-bar" id="cam-mode-bar" style="display:none;">
-          <button class="cam-btn active" id="btn-cam-iso" title="Isometric 3D perspective">ISO</button>
-          <button class="cam-btn" id="btn-cam-top" title="Top-down 2D architecture view">TOP</button>
         </div>
 
         <!-- Quick Jump Layer Elevator (in 3D Mode) -->
@@ -268,14 +270,14 @@
           Building the architecture…
         </div>
 
-        <!-- Legend -->
-        <div class="scene-legend" aria-hidden="true">
-          <span class="legend-dot"></span>
-          <span id="scene-status">5 platform layers · 44 components · Real-time tracing</span>
-        </div>
-
         <!-- Bottom controls -->
         <div class="bottom-controls">
+          <!-- Legend -->
+          <div class="scene-legend" aria-hidden="true">
+            <span class="legend-dot"></span>
+            <span id="scene-status">5 platform layers · 44 components · Real-time tracing</span>
+          </div>
+
           <div class="assembly-controls">
             <div class="segmented" role="group" aria-label="Layer arrangement">
               <button id="stacked-btn" aria-pressed="false">Stacked</button>

@@ -253,6 +253,13 @@
 
 /* ── View panels — display managed entirely by main.js ──── */
 .view-panel { display: none; }
+#architecture-panel,
+#patterns-panel {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
 
 /* ═══════════════════════════════════════════════════════════
    RESPONSIVE MEDIA QUERIES (TABLET & MOBILE)

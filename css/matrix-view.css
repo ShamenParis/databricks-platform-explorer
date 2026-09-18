@@ -2,22 +2,18 @@
    2D INTERACTIVE ARCHITECTURE MATRIX & VIEW CONTROLS
    ========================================================= */
 
-/* ── Viewport Mode Switcher (Top of Canvas) ──────────────── */
+/* ── Viewport Mode Switcher (Inside Viewport Header Dock) ─── */
 .viewport-mode-bar {
-  position: absolute;
-  top: 14px;
-  left: 18px;
   display: flex;
   align-items: center;
   gap: 6px;
-  background: rgba(8, 14, 28, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(8, 14, 28, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 99px;
   padding: 4px 6px;
-  z-index: 15;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
 }
 .vmode-btn {
   background: transparent;
@@ -59,7 +55,7 @@
 /* ── Layer Elevator Bar (Quick Jump in 3D Mode) ─────────── */
 .layer-elevator-bar {
   position: absolute;
-  bottom: 56px;
+  bottom: 60px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -124,19 +120,16 @@
 
 /* ── Camera Angle Switcher (ISO / TOP) ───────────────────── */
 .cam-mode-bar {
-  position: absolute;
-  top: 14px;
-  right: 18px;
   display: flex;
   align-items: center;
   gap: 4px;
-  background: rgba(8, 14, 28, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(8, 14, 28, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 8px;
   padding: 3px;
-  z-index: 15;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
 }
 .cam-btn {
   background: transparent;
@@ -164,7 +157,7 @@
   inset: 0;
   overflow-y: auto;
   background: #080d17;
-  padding: 60px 24px 80px;
+  padding: 76px 24px 80px;
   z-index: 10;
   display: none;
 }
@@ -473,11 +466,9 @@
 /* ── Responsive ─────────────────────────────────────────── */
 @media (max-width: 960px) {
   #matrix-canvas-view {
-    padding: 56px 12px 90px;
+    padding: 68px 12px 90px;
   }
   .viewport-mode-bar {
-    top: 10px;
-    left: 10px;
     gap: 4px;
     padding: 3px 5px;
   }
@@ -525,23 +516,26 @@
     gap: 12px;
   }
   .cam-mode-bar {
-    top: 10px;
-    right: 10px;
-    padding: 2px;
+    padding: 2px 4px;
+    gap: 2px;
+  }
+  .cam-btn {
+    padding: 4px 8px;
+    font-size: 10.5px;
   }
   .layer-elevator-bar {
-    bottom: 64px;
-    max-width: calc(100vw - 20px);
+    bottom: 54px;
+    max-width: calc(100vw - 16px);
     overflow-x: auto;
     scrollbar-width: none;
-    padding: 4px 8px;
-    gap: 4px;
+    padding: 3px 6px;
+    gap: 3px;
   }
   .layer-elevator-bar::-webkit-scrollbar {
     display: none;
   }
   .elevator-btn {
-    padding: 4px 8px;
+    padding: 4px 7px;
     font-size: 10px;
     white-space: nowrap;
     flex-shrink: 0;
@@ -550,7 +544,7 @@
 
 @media (max-width: 540px) {
   #matrix-canvas-view {
-    padding: 50px 8px 96px;
+    padding: 62px 8px 96px;
   }
   .matrix-layer {
     padding: 10px;

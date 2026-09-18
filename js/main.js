@@ -72,6 +72,8 @@ function switchViewportMode(mode) {
   const camBar = document.getElementById('cam-mode-bar');
   const bottomCtrls = document.querySelector('.bottom-controls');
   const layerElevator = document.getElementById('layer-elevator-bar');
+  const viewTools = document.getElementById('view-tools');
+  const sceneHeading = document.getElementById('scene-heading');
 
   if (mode === '3d') {
     btn3d?.classList.add('active');
@@ -84,6 +86,8 @@ function switchViewportMode(mode) {
     if (camBar) camBar.style.display = 'flex';
     if (bottomCtrls) bottomCtrls.style.display = 'flex';
     if (layerElevator) layerElevator.style.display = 'flex';
+    if (viewTools) viewTools.style.display = 'flex';
+    if (sceneHeading) sceneHeading.style.display = 'block';
     try { history.replaceState(null, '', '?mode=3d'); } catch(e) {}
   } else {
     btn2d?.classList.add('active');
@@ -93,6 +97,8 @@ function switchViewportMode(mode) {
     if (camBar) camBar.style.display = 'none';
     if (bottomCtrls) bottomCtrls.style.display = 'none';
     if (layerElevator) layerElevator.style.display = 'none';
+    if (viewTools) viewTools.style.display = 'none';
+    if (sceneHeading) sceneHeading.style.display = 'none';
     try { history.replaceState(null, '', window.location.pathname); } catch(e) {}
   }
 }

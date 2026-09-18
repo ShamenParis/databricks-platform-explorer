@@ -27,6 +27,9 @@
   padding: 24px 20px 60px;
   color: var(--dais-ink);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 /* ── View Switcher Buttons ───────────────────────────────── */
@@ -202,6 +205,8 @@
   flex-direction: column;
   gap: 12px;
   box-shadow: 0 20px 60px -15px rgba(0, 0, 0, 0.7), inset 0 0 40px rgba(21, 175, 221, 0.04);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .player {
@@ -214,6 +219,9 @@
   border-radius: 16px;
   padding: 16px 20px;
   transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 .player:hover {
   border-color: rgba(255, 54, 33, 0.4);
@@ -232,6 +240,8 @@
   flex-wrap: wrap;
   gap: 24px;
   align-items: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* ── Interactive Items (Cards) ───────────────────────────── */
@@ -246,6 +256,9 @@
   border: 1px solid transparent;
   transition: all 0.18s ease;
   user-select: none;
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
 }
 .pditem:hover {
   transform: translateY(-2px);
@@ -415,6 +428,9 @@
   gap: 20px;
   align-items: center;
   box-shadow: 0 0 20px rgba(21, 175, 221, 0.1);
+  box-sizing: border-box;
+  max-width: 100%;
+  min-width: 0;
 }
 
 /* ── Open Infrastructure Tier ────────────────────────────── */
@@ -779,30 +795,39 @@
 }
 
 /* ── Responsive ─────────────────────────────────────────── */
+/* ── Responsive ─────────────────────────────────────────── */
 @media (max-width: 960px) {
   .dais-container {
-    padding: 14px 10px 60px;
+    padding: 12px 10px 60px;
+    width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
   }
   .arch-view-nav {
     flex-direction: column;
     gap: 6px;
     width: 100%;
+    box-sizing: border-box;
   }
   .arch-view-tab {
     width: 100%;
     justify-content: center;
     font-size: 12px;
     padding: 8px 12px;
+    box-sizing: border-box;
   }
   .pdwrap {
-    padding: 12px;
+    padding: 6px;
     border-radius: 16px;
+    width: 100%;
+    box-sizing: border-box;
   }
   .pdhead {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
     padding: 10px;
+    text-align: center;
   }
   .pdhead .sep {
     display: none;
@@ -814,57 +839,131 @@
     font-size: 18px;
   }
   .pdhead .tag {
-    font-size: 14px;
+    font-size: 13px;
     text-align: center;
   }
   .pdiagram {
     padding: 10px;
     border-radius: 14px;
     gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
   }
   .player {
     grid-template-columns: 1fr;
     gap: 10px;
-    padding: 12px 14px;
+    padding: 12px 12px;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .player > .lbl {
+    font-size: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 6px;
+    margin-bottom: 2px;
   }
   .pdrow {
     gap: 8px;
+    width: 100%;
+    box-sizing: border-box;
   }
   .pditem {
     padding: 6px 10px;
     gap: 8px;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.08);
+    box-sizing: border-box;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .workcontent {
+    width: 100%;
+    box-sizing: border-box;
   }
   .workcontent .worktop {
     flex-direction: column;
     align-items: stretch;
     gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
   }
   .workcontent .lbl.right {
     margin-left: 0;
     text-align: left;
+    font-size: 12px;
+    color: var(--dais-ink3);
+  }
+  .pgroup {
+    width: 100%;
+    box-sizing: border-box;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px 10px;
   }
   .pgroup.genie {
     flex-direction: column;
     align-items: stretch;
     width: 100%;
+    box-sizing: border-box;
     gap: 8px;
   }
+  .phi {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    padding: 8px 10px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .vsep {
+    display: none;
+  }
   .pills {
+    display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 5px;
+    width: 100%;
+    box-sizing: border-box;
   }
   .gpill {
-    padding: 5px 8px;
+    padding: 4px 8px;
+    font-size: 10.5px;
+  }
+  .pontology {
+    width: 100%;
+    box-sizing: border-box;
+    justify-content: center;
+  }
+  .player.infra {
+    padding: 12px 10px;
+  }
+  .pdrow.infra {
+    flex-wrap: wrap;
+    gap: 6px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .infralabel {
+    width: 100%;
+    display: block;
     font-size: 11px;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+  .infragap {
+    display: none;
   }
   .xchips {
     gap: 6px;
+    width: 100%;
+    box-sizing: border-box;
   }
   .xchip {
     font-size: 11.5px;
     padding: 6px 10px;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   .dais-modal {
     width: min(560px, 95vw);
@@ -887,19 +986,36 @@
 
 @media (max-width: 540px) {
   .pditem {
-    flex: 1 1 calc(50% - 8px);
-    min-width: 110px;
+    flex: 1 1 calc(50% - 6px);
+    max-width: calc(50% - 4px);
+    min-width: 90px;
+    padding: 6px 8px;
+    gap: 6px;
+  }
+  .phi .pditem {
+    flex: 1 1 calc(50% - 6px);
+    max-width: calc(50% - 4px);
+  }
+  .pditem.sm {
+    flex: 1 1 calc(50% - 6px);
+    max-width: calc(50% - 4px);
+    min-width: 80px;
   }
   .itile {
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
   }
   .itile svg {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
   }
   .iname {
-    font-size: 12px;
+    font-size: 11.5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    word-break: break-word;
   }
   .modal-stats-grid {
     grid-template-columns: 1fr;
