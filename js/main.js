@@ -3,12 +3,12 @@
  * Wires all modules together and handles view switching.
  */
 
-import { initScene, selectItem, clearSelection, setSeparation, setExploded, resetCamera, zoomIn, zoomOut, panUp, panDown, resizeRenderer, highlightOpenSource, setCameraMode, focusLayer } from './scene.js';
-import { initNav, setActiveLayerSilent, setActiveCompSilent } from './nav.js';
-import { initInspector, showWelcome, showLayerDetail, showCompDetail } from './inspector.js';
-import { LAYERS, COMPONENT_MAP } from './data.js';
-import { renderDaisArchitecture } from './dais-arch.js';
-import { render2DMatrix, highlightMatrixComponent, highlightMatrixLayer, activateJourney, clearMatrixHighlights } from './matrix-view.js';
+import { initScene, selectItem, clearSelection, setSeparation, setExploded, resetCamera, zoomIn, zoomOut, panUp, panDown, resizeRenderer, highlightOpenSource, setCameraMode, focusLayer } from './scene.js?v=d2';
+import { initNav, setActiveLayerSilent, setActiveCompSilent } from './nav.js?v=d2';
+import { initInspector, showWelcome, showLayerDetail, showCompDetail } from './inspector.js?v=d2';
+import { LAYERS, COMPONENT_MAP } from './data.js?v=d2';
+import { renderDaisArchitecture } from './dais-arch.js?v=d2';
+import { render2DMatrix, highlightMatrixComponent, highlightMatrixLayer, activateJourney, clearMatrixHighlights } from './matrix-view.js?v=d2';
 
 // Guard flag to prevent circular calls between scene ↔ nav ↔ scene
 let _selecting = false;

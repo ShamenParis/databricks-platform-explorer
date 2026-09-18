@@ -19,6 +19,8 @@ import { getIconSvg } from './icons.js';
 let renderer, scene, camera, controls, animId;
 let layerMeshes   = {};   // layerId  → THREE.Mesh
 let compMeshes    = {};   // compId   → THREE.Mesh
+let baseMesh      = null;
+let gridHelper    = null;
 let connCurves    = [];   // active connection lines
 let hoveredMesh   = null;
 let selectedId    = null;
@@ -38,22 +40,22 @@ let camTweenDur   = 700; // ms
 let currentCameraMode = 'iso';
 
 // Geometry & Layout Constants
-const PLATE_W     = 11.2;
-const PLATE_D     = 6.6;
+const PLATE_W     = 10.6;
+const PLATE_D     = 6.2;
 const PLATE_H     = 0.16;
-const LAYER_GAP   = 2.1;    // Generous spacing between layers
-const STEP_Z      = 1.5;    // Stepped cascade: upper layers set back, lower layers brought forward
-const BASE_SEP    = 1.0;    // Multiplier for layer separation
-let sepMultiplier = 1.0;
+const LAYER_GAP   = 1.75;   // Balanced vertical spacing between layers
+const STEP_Z      = 1.30;   // Elegant stepped cascade
+const BASE_SEP    = 1.0;
+let sepMultiplier = 0.92;
 
 // Stack layer order from bottom (idx=0) to top (idx=4)
 const STACK_LAYERS = LAYERS.filter(l => l.isStack).sort((a, b) => a.stackLevel - b.stackLevel);
 
-// Default camera anchors
-const ISO_CAM_POS  = new THREE.Vector3(0, 14.5, 18.5);
-const ISO_CAM_TGT  = new THREE.Vector3(0, 0.4, 0);
-const TOP_CAM_POS  = new THREE.Vector3(0, 22, 0.001);
-const TOP_CAM_TGT  = new THREE.Vector3(0, 0, 0);
+// Default camera anchors — framed with generous margins to avoid overlay collisions
+const ISO_CAM_POS  = new THREE.Vector3(0, 23.0, 33.0);
+const ISO_CAM_TGT  = new THREE.Vector3(0, 2.6, 0);
+const TOP_CAM_POS  = new THREE.Vector3(0, 30, 0.001);
+const TOP_CAM_TGT  = new THREE.Vector3(0, 1.0, 0);
 
 // Raycaster for mouse picking
 const raycaster = new THREE.Raycaster();
@@ -83,7 +85,7 @@ export function initScene(container, selectCallback) {
 
   // Camera — Framed so all 5 layers are 100% visible from top to bottom
   const aspect = width / height;
-  camera = new THREE.PerspectiveCamera(38, aspect, 0.1, 400);
+  camera = new THREE.PerspectiveCamera(33, aspect, 0.1, 400);
   camera.position.copy(ISO_CAM_POS);
   camera.lookAt(ISO_CAM_TGT);
 
@@ -117,7 +119,7 @@ export function initScene(container, selectCallback) {
   controls.maxPolarAngle = Math.PI / 2.05;
   controls.minPolarAngle = Math.PI / 16;
   controls.minDistance = 4;
-  controls.maxDistance = 35;
+  controls.maxDistance = 60;
   controls.target.copy(ISO_CAM_TGT);
 
   // Build the 3D Architecture
@@ -495,13 +497,13 @@ function buildBaseboard() {
     opacity: 0.9,
   });
   const baseGeo = new THREE.BoxGeometry(PLATE_W + 4.0, 0.1, PLATE_D + 10.0);
-  const baseMesh = new THREE.Mesh(baseGeo, baseMat);
+  baseMesh = new THREE.Mesh(baseGeo, baseMat);
   baseMesh.position.set(0, baseboardY, baseboardZ);
   baseMesh.receiveShadow = true;
   scene.add(baseMesh);
 
   // Grid texture on baseboard
-  const gridHelper = new THREE.GridHelper(PLATE_W + 3.6, 24, 0x1e293b, 0x0f172a);
+  gridHelper = new THREE.GridHelper(PLATE_W + 3.6, 24, 0x1e293b, 0x0f172a);
   gridHelper.position.set(0, baseboardY + 0.06, baseboardZ);
   scene.add(gridHelper);
 }
@@ -844,6 +846,12 @@ function updatePositions() {
       }
     });
   });
+
+  if (baseMesh) {
+    const baseboardY = getLayerY(0, sepMultiplier) - 1.2;
+    baseMesh.position.y = baseboardY;
+    if (gridHelper) gridHelper.position.y = baseboardY + 0.06;
+  }
 
   if (selectedType === 'component' && selectedId) {
     const comp = COMPONENT_MAP[selectedId];
