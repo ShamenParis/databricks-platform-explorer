@@ -217,27 +217,27 @@ export function renderSparkSimulator() {
           <div class="sim-board-header">
             <div class="sim-board-title">
               <span style="color:var(--sim-cyan);">●</span>
-              Live Cluster Topology & Streaming Flow
+              Live Cluster Architecture & Concurrency
             </div>
             <span class="sim-board-badge sim-badge-good" id="cluster-mode-badge">
               Classic Dedicated · 8 Nodes Active
             </span>
           </div>
 
-          <!-- Dynamic SVG Canvas for Animated Flow Lines & Particles -->
+          <!-- Dynamic SVG Canvas for Navigation Flow Streams & Traveling Light Pulses (Arrow-Free) -->
           <svg class="sim-flow-svg-overlay" id="sim-flow-svg" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="grad-cyan" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#00d2ff" stop-opacity="0.9"/>
-                <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.9"/>
+                <stop offset="0%" stop-color="#00d2ff" stop-opacity="0.85"/>
+                <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.85"/>
               </linearGradient>
               <linearGradient id="grad-green" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#10b981" stop-opacity="0.9"/>
-                <stop offset="100%" stop-color="#34d399" stop-opacity="0.9"/>
+                <stop offset="0%" stop-color="#10b981" stop-opacity="0.85"/>
+                <stop offset="100%" stop-color="#34d399" stop-opacity="0.85"/>
               </linearGradient>
               <linearGradient id="grad-purple" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#a855f7" stop-opacity="0.9"/>
-                <stop offset="100%" stop-color="#c084fc" stop-opacity="0.9"/>
+                <stop offset="0%" stop-color="#a855f7" stop-opacity="0.85"/>
+                <stop offset="100%" stop-color="#c084fc" stop-opacity="0.85"/>
               </linearGradient>
               <linearGradient id="grad-spill" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" stop-color="#ff3621"/>
@@ -259,20 +259,6 @@ export function renderSparkSimulator() {
                   <feMergeNode in="SourceGraphic"/>
                 </feMerge>
               </filter>
-
-              <!-- Arrowhead Markers -->
-              <marker id="arrow-cyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-                <path d="M 0 1 L 9 5 L 0 9 z" fill="#00d2ff"/>
-              </marker>
-              <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-                <path d="M 0 1 L 9 5 L 0 9 z" fill="#10b981"/>
-              </marker>
-              <marker id="arrow-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-                <path d="M 0 1 L 9 5 L 0 9 z" fill="#c084fc"/>
-              </marker>
-              <marker id="arrow-lava" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
-                <path d="M 0 1 L 9 5 L 0 9 z" fill="#ff3621"/>
-              </marker>
             </defs>
             <g id="flow-paths-layer"></g>
             <g id="flow-particles-layer"></g>
@@ -656,28 +642,28 @@ function initSimulatorLogic(container, state) {
     // 8. Render Stages Pipeline
     renderStagesPipeline(container, state, physics);
 
-    // 9. Render Animated SVG Flow Paths
-    renderFlowSvg(container, state, physics);
+    // 9. Render Animated Navigation Flow Conduits & Traveling Light Pulses (Arrow-Free)
+    renderFlowNavigation(container, state, physics);
 
     // 10. Render Prescriptive Spark Config Advisor
     renderAdvisor(container, state, physics);
   }
 
-  // Auto-reflow SVG arrows on board resize & window resize
+  // Auto-reflow navigation flow lines on board resize & window resize
   const boardEl = container.querySelector('#sim-topology-board');
   if (window.ResizeObserver && boardEl) {
     const ro = new ResizeObserver(() => {
-      renderFlowSvg(container, state, computeSparkPhysics(state));
+      renderFlowNavigation(container, state, computeSparkPhysics(state));
     });
     ro.observe(boardEl);
   }
   window.addEventListener('resize', () => {
-    renderFlowSvg(container, state, computeSparkPhysics(state));
+    renderFlowNavigation(container, state, computeSparkPhysics(state));
   });
 
   // Initial Run
   updateAll();
-  setTimeout(() => renderFlowSvg(container, state, computeSparkPhysics(state)), 100);
+  setTimeout(() => renderFlowNavigation(container, state, computeSparkPhysics(state)), 100);
 
   return container;
 }
@@ -968,8 +954,8 @@ function renderStagesPipeline(container, state, physics) {
   }
 }
 
-// ── Render Animated SVG Flow Paths & Particles ───────────────
-function renderFlowSvg(container, state, physics) {
+// ── Render Animated Navigation Flow Conduits & Traveling Light Pulses (Arrow-Free) ──
+function renderFlowNavigation(container, state, physics) {
   const svg = container.querySelector('#sim-flow-svg');
   const pathsGroup = container.querySelector('#flow-paths-layer');
   const particlesGroup = container.querySelector('#flow-particles-layer');
@@ -996,11 +982,10 @@ function renderFlowSvg(container, state, physics) {
   const isServerless = state.clusterMode === 'serverless';
   const taskLineClass = isServerless ? 'flow-line serverless' : 'flow-line normal';
   const particleClass = isServerless ? 'green' : 'cyan';
-  const arrowMarker = isServerless ? 'url(#arrow-green)' : 'url(#arrow-cyan)';
 
   const driverRightX = driverRect.right - boardRect.left;
 
-  // 1. Task Dispatch Arrows: Driver -> Left-column Executors (0, 2, 4, 6)
+  // 1. Task Scheduling Conduits: Driver -> Left-column Executors
   const leftColCards = [];
   const rightColCards = [];
   const firstLeft = workerCards[0]?.getBoundingClientRect().left || 0;
@@ -1014,7 +999,6 @@ function renderFlowSvg(container, state, physics) {
     }
   });
 
-  // If cards are single column (narrow screen), treat first 4 as left targets
   const dispatchTargets = leftColCards.length > 0 ? leftColCards : workerCards.slice(0, 4).map((card, idx) => ({ card, idx }));
 
   dispatchTargets.forEach(({ card }, i) => {
@@ -1028,15 +1012,15 @@ function renderFlowSvg(container, state, physics) {
     const deltaX = targetX - driverRightX;
     const c1X = driverRightX + Math.max(20, deltaX * 0.42);
     const c2X = targetX - Math.max(20, deltaX * 0.42);
-    const taskPathD = `M ${driverRightX.toFixed(1)} ${driverY.toFixed(1)} C ${c1X.toFixed(1)} ${driverY.toFixed(1)}, ${c2X.toFixed(1)} ${targetY.toFixed(1)}, ${(targetX - 2).toFixed(1)} ${targetY.toFixed(1)}`;
+    const taskPathD = `M ${driverRightX.toFixed(1)} ${driverY.toFixed(1)} C ${c1X.toFixed(1)} ${driverY.toFixed(1)}, ${c2X.toFixed(1)} ${targetY.toFixed(1)}, ${targetX.toFixed(1)} ${targetY.toFixed(1)}`;
 
     const pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     pathEl.setAttribute('d', taskPathD);
     pathEl.setAttribute('class', taskLineClass);
-    pathEl.setAttribute('marker-end', arrowMarker);
+    // Arrow-free: NO marker-end attribute
     pathsGroup.appendChild(pathEl);
 
-    // Continuous streaming particles
+    // High-tech traveling light pulse particles
     const dur = (1.15 + (i * 0.12)).toFixed(2);
     const p1 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     p1.setAttribute('class', `flow-particle ${particleClass}`);
@@ -1049,7 +1033,7 @@ function renderFlowSvg(container, state, physics) {
     particlesGroup.appendChild(p2);
   });
 
-  // 2. Inter-Executor Shuffle Flow (Col 1 -> Col 2 Pairs)
+  // 2. Inter-Executor Shuffle Conduits (Left Column -> Right Column)
   if ((state.workload === 'aggregation' || state.workload === 'join') && rightColCards.length > 0) {
     const pairCount = Math.min(leftColCards.length, rightColCards.length, 4);
     for (let p = 0; p < pairCount; p++) {
@@ -1067,12 +1051,12 @@ function renderFlowSvg(container, state, physics) {
         const delta = bLeft - aRight;
         const c1X = aRight + delta * 0.45;
         const c2X = bLeft - delta * 0.45;
-        const shufflePathD = `M ${aRight.toFixed(1)} ${aY.toFixed(1)} C ${c1X.toFixed(1)} ${(aY - 10).toFixed(1)}, ${c2X.toFixed(1)} ${(bY - 10).toFixed(1)}, ${(bLeft - 2).toFixed(1)} ${bY.toFixed(1)}`;
+        const shufflePathD = `M ${aRight.toFixed(1)} ${aY.toFixed(1)} C ${c1X.toFixed(1)} ${(aY - 10).toFixed(1)}, ${c2X.toFixed(1)} ${(bY - 10).toFixed(1)}, ${bLeft.toFixed(1)} ${bY.toFixed(1)}`;
 
         const shufflePath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         shufflePath.setAttribute('d', shufflePathD);
         shufflePath.setAttribute('class', 'flow-line shuffle');
-        shufflePath.setAttribute('marker-end', 'url(#arrow-purple)');
+        // Arrow-free: NO marker-end attribute
         pathsGroup.appendChild(shufflePath);
 
         const sp = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
@@ -1083,11 +1067,10 @@ function renderFlowSvg(container, state, physics) {
     }
   }
 
-  // 3. Disk Spilling Flow Arrows (Overloaded Executors -> Local NVMe Spill Target)
+  // 3. Disk Spilling Conduits (Overloaded Executors -> Local NVMe SSD)
   if (physics.isSpilling) {
     const spillLeftX = spillRect.left - boardRect.left;
 
-    // If severe skew, hot Executor #0 is spilling; otherwise right-column executors spill into SSD
     const spillingCards = state.dataSkew === 'severe'
       ? [workerCards[0]]
       : (rightColCards.length > 0 ? rightColCards.map(c => c.card) : workerCards.slice(0, 3));
@@ -1104,15 +1087,15 @@ function renderFlowSvg(container, state, physics) {
       const c2X = spillLeftX - Math.max(25, deltaX * 0.45);
       const targetY = (spillRect.top - boardRect.top) + (spillRect.height * (0.32 + sIdx * 0.25));
 
-      const spillPathD = `M ${wRight.toFixed(1)} ${wCenterY.toFixed(1)} C ${c1X.toFixed(1)} ${wCenterY.toFixed(1)}, ${c2X.toFixed(1)} ${targetY.toFixed(1)}, ${(spillLeftX - 2).toFixed(1)} ${targetY.toFixed(1)}`;
+      const spillPathD = `M ${wRight.toFixed(1)} ${wCenterY.toFixed(1)} C ${c1X.toFixed(1)} ${wCenterY.toFixed(1)}, ${c2X.toFixed(1)} ${targetY.toFixed(1)}, ${spillLeftX.toFixed(1)} ${targetY.toFixed(1)}`;
 
       const spillPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       spillPath.setAttribute('d', spillPathD);
       spillPath.setAttribute('class', 'flow-line spill');
-      spillPath.setAttribute('marker-end', 'url(#arrow-lava)');
+      // Arrow-free: NO marker-end attribute
       pathsGroup.appendChild(spillPath);
 
-      // Fast streaming glowing lava particles
+      // Streaming fiery light pulses
       const pSpill1 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
       pSpill1.setAttribute('class', 'flow-particle spill');
       pSpill1.innerHTML = `<animateMotion path="${spillPathD}" dur="0.7s" repeatCount="indefinite" begin="0s"/>`;
@@ -1123,7 +1106,7 @@ function renderFlowSvg(container, state, physics) {
       pSpill2.innerHTML = `<animateMotion path="${spillPathD}" dur="0.7s" repeatCount="indefinite" begin="0.35s"/>`;
       particlesGroup.appendChild(pSpill2);
 
-      // Add a prominent animated floating SVG alert badge on the top spill path
+      // Prominent animated floating spill badge
       if (sIdx === 0 && labelsGroup && deltaX > 75) {
         const midX = (wRight + spillLeftX) / 2;
         const midY = (wCenterY + targetY) / 2 - 12;
@@ -1140,7 +1123,7 @@ function renderFlowSvg(container, state, physics) {
       }
     });
   } else if (labelsGroup) {
-    // Show pristine zero-spill badge
+    // Zero-spill status indicator
     const lastCard = (rightColCards[0]?.card) || workerCards[workerCards.length - 1];
     if (lastCard) {
       const cardRect = lastCard.getBoundingClientRect();

@@ -380,46 +380,46 @@
   letter-spacing: 0.04em;
 }
 
-/* ── SVG Animated Flow Overlay ───────────────────────────── */
+/* ── SVG Animated Navigation Flow Conduits (Arrow-Free) ───── */
 .sim-flow-svg-overlay {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 25;
+  z-index: 15;
 }
 
-/* Flow Paths & Animated Dash Lines */
+/* High-Tech Glowing Conduits */
 .flow-line {
   fill: none;
-  stroke-width: 2.5;
+  stroke-width: 2.2;
   stroke-linecap: round;
 }
 .flow-line.normal {
-  stroke: var(--sim-cyan);
+  stroke: rgba(0, 210, 255, 0.45);
   stroke-dasharray: 6 6;
-  animation: flow-dash-cyan 1s linear infinite;
-  filter: drop-shadow(0 0 6px rgba(0, 210, 255, 0.5));
+  animation: flow-dash-cyan 1.2s linear infinite;
+  filter: drop-shadow(0 0 6px rgba(0, 210, 255, 0.35));
 }
 .flow-line.shuffle {
-  stroke: var(--sim-purple);
+  stroke: rgba(168, 85, 247, 0.45);
   stroke-dasharray: 6 6;
-  animation: flow-dash-purple 0.8s linear infinite;
-  filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.5));
+  animation: flow-dash-purple 1s linear infinite;
+  filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.35));
 }
 .flow-line.spill {
-  stroke: var(--sim-lava);
-  stroke-width: 3.5;
-  stroke-dasharray: 8 4;
-  animation: flow-dash-lava 0.6s linear infinite;
-  filter: drop-shadow(0 0 10px rgba(255, 54, 33, 0.8));
+  stroke: rgba(255, 54, 33, 0.75);
+  stroke-width: 2.8;
+  stroke-dasharray: 8 5;
+  animation: flow-dash-lava 0.7s linear infinite;
+  filter: drop-shadow(0 0 10px rgba(255, 54, 33, 0.7));
 }
 .flow-line.serverless {
-  stroke: var(--sim-green);
-  stroke-dasharray: 4 4;
-  animation: flow-dash-green 0.5s linear infinite;
-  filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.6));
+  stroke: rgba(16, 185, 129, 0.5);
+  stroke-dasharray: 5 5;
+  animation: flow-dash-green 0.8s linear infinite;
+  filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.4));
 }
 
 @keyframes flow-dash-cyan {
@@ -431,24 +431,24 @@
   to { stroke-dashoffset: 0; }
 }
 @keyframes flow-dash-lava {
-  from { stroke-dashoffset: 24; }
+  from { stroke-dashoffset: 26; }
   to { stroke-dashoffset: 0; }
 }
 @keyframes flow-dash-green {
-  from { stroke-dashoffset: 16; }
+  from { stroke-dashoffset: 20; }
   to { stroke-dashoffset: 0; }
 }
 
-/* Flowing Particles along SVG paths */
+/* Streaming Light Pulse Particles */
 .flow-particle {
-  r: 4.5;
+  r: 4;
   fill: #fff;
-  filter: drop-shadow(0 0 8px #fff);
+  filter: drop-shadow(0 0 7px #fff);
 }
-.flow-particle.cyan { fill: var(--sim-cyan); filter: drop-shadow(0 0 8px var(--sim-cyan)); }
-.flow-particle.spill { fill: var(--sim-lava); filter: drop-shadow(0 0 12px var(--sim-lava)); r: 5.5; }
-.flow-particle.green { fill: var(--sim-green); filter: drop-shadow(0 0 8px var(--sim-green)); }
-.flow-particle.purple { fill: var(--sim-purple); filter: drop-shadow(0 0 8px var(--sim-purple)); }
+.flow-particle.cyan { fill: #38bdf8; filter: drop-shadow(0 0 8px #00d2ff); }
+.flow-particle.spill { fill: #ff5733; r: 5; filter: drop-shadow(0 0 10px #ff3621); }
+.flow-particle.green { fill: #34d399; filter: drop-shadow(0 0 8px #10b981); }
+.flow-particle.purple { fill: #c084fc; filter: drop-shadow(0 0 8px #a855f7); }
 
 /* ── Cluster Architecture Topology Diagram ───────────────── */
 .sim-topology-layout {
