@@ -160,6 +160,56 @@
   border-color: var(--sim-cyan);
 }
 
+/* ── Smart Control Visibility (show/hide by cluster mode) ─── */
+.sim-ctrl-group {
+  transition: opacity 0.25s ease, max-height 0.3s ease;
+  overflow: hidden;
+  max-height: 200px;
+}
+.sim-ctrl-hidden {
+  max-height: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Mode-specific contextual info banner */
+.sim-mode-info-note {
+  display: none;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--sim-text-muted);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
+  animation: fade-in-note 0.25s ease;
+}
+.sim-mode-info-note.serverless {
+  border-color: rgba(16, 185, 129, 0.3);
+  background: rgba(16, 185, 129, 0.06);
+}
+.sim-mode-info-note.autoscale {
+  border-color: rgba(245, 158, 11, 0.3);
+  background: rgba(245, 158, 11, 0.06);
+}
+@keyframes fade-in-note {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Subtle hint text below a control */
+.sim-ctrl-note {
+  font-size: 10.5px;
+  color: var(--sim-text-muted);
+  font-style: italic;
+  padding-top: 2px;
+  opacity: 0.75;
+}
+
 /* Segmented Buttons */
 .sim-segmented {
   display: flex;
