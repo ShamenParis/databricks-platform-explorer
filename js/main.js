@@ -9,7 +9,7 @@ import { initInspector, showWelcome, showLayerDetail, showCompDetail } from './i
 import { LAYERS, COMPONENT_MAP } from './data.js?v=d2';
 import { renderDaisArchitecture } from './dais-arch.js?v=d2';
 import { render2DMatrix, highlightMatrixComponent, highlightMatrixLayer, activateJourney, clearMatrixHighlights } from './matrix-view.js?v=d2';
-import { renderSparkSimulator } from './spark-simulator.js?v=d3';
+import { renderSparkSimulator } from './spark-simulator.js?v=d4';
 
 // Guard flag to prevent circular calls between scene ↔ nav ↔ scene
 let _selecting = false;
