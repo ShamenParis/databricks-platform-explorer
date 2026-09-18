@@ -9,6 +9,7 @@ import { initInspector, showWelcome, showLayerDetail, showCompDetail } from './i
 import { LAYERS, COMPONENT_MAP } from './data.js?v=d2';
 import { renderDaisArchitecture } from './dais-arch.js?v=d2';
 import { render2DMatrix, highlightMatrixComponent, highlightMatrixLayer, activateJourney, clearMatrixHighlights } from './matrix-view.js?v=d2';
+import { renderSparkSimulator } from './spark-simulator.js?v=d3';
 
 // Guard flag to prevent circular calls between scene ↔ nav ↔ scene
 let _selecting = false;
@@ -26,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initHelpDialog();
   initPatternsPage();
   initDaisArch();
+  initSparkSimulator();
   initMobileDrawers();
   setStatusDate();
 
@@ -38,6 +40,13 @@ document.addEventListener('DOMContentLoaded', () => {
   switchViewportMode(initialMode);
   document.getElementById('loading')?.classList.add('hidden');
 });
+
+function initSparkSimulator() {
+  const mount = document.getElementById('simulator-mount');
+  if (mount && !mount.hasChildNodes()) {
+    mount.appendChild(renderSparkSimulator());
+  }
+}
 
 function initDaisArch() {
   const mount = document.getElementById('dais-arch-mount');
@@ -260,15 +269,21 @@ function initViewTabs() {
     tab.addEventListener('click', () => switchView(tab.dataset.view));
   });
   const params = new URLSearchParams(window.location.search);
-  const initialTab = params.get('tab') || 'explorer';
+  const initialTab = params.get('tab') || params.get('view') || 'explorer';
   switchView(initialTab);
 }
 
 function switchView(view) {
   // Update tab active states
   document.querySelectorAll('.view-tab').forEach(t => {
-    t.classList.toggle('active', t.dataset.view === view);
-    t.setAttribute('aria-selected', t.dataset.view === view ? 'true' : 'false');
+    const isActive = t.dataset.view === view;
+    t.classList.toggle('active', isActive);
+    t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    if (isActive) {
+      try {
+        t.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      } catch (e) {}
+    }
   });
 
   const workspace = document.getElementById('main-workspace');
@@ -289,6 +304,7 @@ function switchView(view) {
     document.getElementById('explorer-panel').style.display = 'contents';
     document.getElementById('architecture-panel').style.display = 'none';
     document.getElementById('patterns-panel').style.display = 'none';
+    document.getElementById('simulator-panel').style.display = 'none';
     if (mobToggle) mobToggle.style.display = '';
   } else {
     // Full-width single column for page views
@@ -296,16 +312,24 @@ function switchView(view) {
     document.getElementById('explorer-panel').style.display = 'none';
     document.getElementById('architecture-panel').style.display = view === 'architecture' ? 'block' : 'none';
     document.getElementById('patterns-panel').style.display = view === 'patterns' ? 'block' : 'none';
+    document.getElementById('simulator-panel').style.display = view === 'simulator' ? 'block' : 'none';
     if (mobToggle) mobToggle.style.display = 'none';
     if (floatBtn) floatBtn.style.display = 'none';
     // Make page views scrollable
-    ['architecture-panel', 'patterns-panel'].forEach(id => {
+    ['architecture-panel', 'patterns-panel', 'simulator-panel'].forEach(id => {
       const el = document.getElementById(id);
       if (el && el.style.display !== 'none') {
         el.style.overflowY = 'auto';
         el.style.height = '100%';
       }
     });
+
+    if (view === 'simulator') {
+      // Trigger smooth resize/recalculation of animated SVG flow arrows and coordinates
+      requestAnimationFrame(() => {
+        window.dispatchEvent(new Event('resize'));
+      });
+    }
   }
 }
 

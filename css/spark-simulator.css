@@ -1,0 +1,1098 @@
+/* =========================================================
+   SPARK & SERVERLESS COMPUTE SIMULATOR — STYLES
+   Interactive Cluster Physics, Memory Model, Spilling & Flow
+   ========================================================= */
+
+:root {
+  --sim-bg: #070c16;
+  --sim-panel: #0d1527;
+  --sim-panel-alt: #111c34;
+  --sim-border: #1a2846;
+  --sim-border-glow: rgba(21, 175, 221, 0.3);
+  --sim-text: #eef4fc;
+  --sim-text-muted: #889bb8;
+  --sim-orange: #ff5722;
+  --sim-lava: #ff3621;
+  --sim-cyan: #00d2ff;
+  --sim-green: #10b981;
+  --sim-amber: #f59e0b;
+  --sim-purple: #a855f7;
+  --sim-red: #ef4444;
+}
+
+/* ── Container ───────────────────────────────────────────── */
+.sim-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px 20px 80px;
+  color: var(--sim-text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* ── Header & Hero ───────────────────────────────────────── */
+.sim-hero {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.sim-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 210, 255, 0.1);
+  border: 1px solid rgba(0, 210, 255, 0.3);
+  color: var(--sim-cyan);
+  padding: 5px 16px;
+  border-radius: 99px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.sim-kicker .pulse-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--sim-cyan);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--sim-cyan);
+  animation: pulse-glow 1.8s infinite;
+}
+.sim-hero h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 0 0 8px;
+  background: linear-gradient(135deg, #fff 40%, var(--sim-cyan) 80%, var(--sim-lava) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.sim-hero p {
+  font-size: 14.5px;
+  color: var(--sim-text-muted);
+  max-width: 760px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ── Quick Scenario Presets ──────────────────────────────── */
+.sim-presets-bar {
+  background: var(--sim-panel);
+  border: 1px solid var(--sim-border);
+  border-radius: 16px;
+  padding: 14px 18px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+.sim-presets-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--sim-orange);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sim-presets-list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+.sim-preset-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--sim-text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.sim-preset-btn:hover {
+  background: rgba(0, 210, 255, 0.12);
+  border-color: rgba(0, 210, 255, 0.4);
+  color: #fff;
+  transform: translateY(-1px);
+}
+.sim-preset-btn.active {
+  background: rgba(255, 54, 33, 0.18);
+  border-color: var(--sim-lava);
+  color: #fff;
+  box-shadow: 0 0 16px rgba(255, 54, 33, 0.3);
+}
+
+/* ── Main Layout: Controls (Left) & Simulation Visuals (Right) ── */
+.sim-grid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+/* ── Control Deck (Left Sidebar) ─────────────────────────── */
+.sim-controls-card {
+  background: var(--sim-panel);
+  border: 1px solid var(--sim-border);
+  border-radius: 18px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  position: sticky;
+  top: 20px;
+}
+.sim-section-title {
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--sim-cyan);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.sim-ctrl-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sim-ctrl-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--sim-text);
+}
+.sim-ctrl-val {
+  font-family: 'JetBrains Mono', 'Space Mono', monospace;
+  font-size: 12px;
+  color: var(--sim-orange);
+  font-weight: 700;
+}
+
+/* Form Inputs & Sliders */
+.sim-slider {
+  width: 100%;
+  accent-color: var(--sim-lava);
+  cursor: pointer;
+  height: 6px;
+  background: #18243c;
+  border-radius: 99px;
+}
+.sim-select {
+  background: #09101d;
+  border: 1px solid var(--sim-border);
+  border-radius: 8px;
+  color: var(--sim-text);
+  padding: 8px 12px;
+  font-size: 12.5px;
+  font-weight: 500;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.sim-select:focus {
+  border-color: var(--sim-cyan);
+}
+
+/* Segmented Buttons */
+.sim-segmented {
+  display: flex;
+  background: #09101d;
+  border: 1px solid var(--sim-border);
+  border-radius: 10px;
+  padding: 3px;
+  gap: 3px;
+}
+.sim-seg-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--sim-text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 6px 4px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  text-align: center;
+}
+.sim-seg-btn.active {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+.sim-seg-btn.active.serverless {
+  background: rgba(16, 185, 129, 0.25);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+/* Feature Toggle Switches */
+.sim-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+.sim-toggle-row:last-child {
+  border-bottom: none;
+}
+.sim-toggle-info {
+  display: flex;
+  flex-direction: column;
+}
+.sim-toggle-title {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--sim-text);
+}
+.sim-toggle-sub {
+  font-size: 10.5px;
+  color: var(--sim-text-muted);
+}
+.sim-switch {
+  position: relative;
+  display: inline-block;
+  width: 38px;
+  height: 20px;
+  flex-shrink: 0;
+}
+.sim-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.sim-slider-switch {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #1e293b;
+  transition: 0.25s;
+  border-radius: 99px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.sim-slider-switch:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: 0.25s;
+  border-radius: 50%;
+}
+.sim-switch input:checked + .sim-slider-switch {
+  background-color: var(--sim-cyan);
+  border-color: var(--sim-cyan);
+}
+.sim-switch input:checked + .sim-slider-switch:before {
+  transform: translateX(18px);
+}
+
+/* ── Live Visualization Deck (Right Side) ────────────────── */
+.sim-visual-deck {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
+/* ── Live KPI Metrics Bar ─────────────────────────────────── */
+.sim-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.sim-metric-card {
+  background: var(--sim-panel);
+  border: 1px solid var(--sim-border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+.sim-metric-card:hover {
+  border-color: rgba(0, 210, 255, 0.4);
+  transform: translateY(-2px);
+}
+.sim-metric-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 6px;
+  min-height: 24px;
+}
+.sim-metric-lbl {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--sim-text-muted);
+  line-height: 1.3;
+  flex: 1;
+}
+.sim-metric-val {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.02em;
+  margin-top: 2px;
+}
+.sim-metric-sub {
+  font-size: 10.5px;
+  color: var(--sim-text-muted);
+}
+.sim-metric-badge {
+  position: static;
+  flex-shrink: 0;
+  font-size: 8.5px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 99px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.sim-badge-good {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+.sim-badge-warn {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+.sim-badge-danger {
+  background: rgba(239, 68, 68, 0.25);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  animation: pulse-danger 1.5s infinite;
+}
+@keyframes pulse-danger {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* ── Interactive Animated Cluster & Flow Topology Canvas ─── */
+.sim-topology-board {
+  background: #060b14;
+  border: 1px solid #162238;
+  border-radius: 20px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), inset 0 0 40px rgba(0, 210, 255, 0.03);
+}
+
+.sim-board-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.sim-board-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sim-board-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 99px;
+  letter-spacing: 0.04em;
+}
+
+/* ── SVG Animated Flow Overlay ───────────────────────────── */
+.sim-flow-svg-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Flow Paths & Animated Dash Lines */
+.flow-line {
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+.flow-line.normal {
+  stroke: var(--sim-cyan);
+  stroke-dasharray: 6 6;
+  animation: flow-dash-cyan 1s linear infinite;
+  filter: drop-shadow(0 0 6px rgba(0, 210, 255, 0.5));
+}
+.flow-line.shuffle {
+  stroke: var(--sim-purple);
+  stroke-dasharray: 6 6;
+  animation: flow-dash-purple 0.8s linear infinite;
+  filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.5));
+}
+.flow-line.spill {
+  stroke: var(--sim-lava);
+  stroke-width: 3.5;
+  stroke-dasharray: 8 4;
+  animation: flow-dash-lava 0.6s linear infinite;
+  filter: drop-shadow(0 0 10px rgba(255, 54, 33, 0.8));
+}
+.flow-line.serverless {
+  stroke: var(--sim-green);
+  stroke-dasharray: 4 4;
+  animation: flow-dash-green 0.5s linear infinite;
+  filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.6));
+}
+
+@keyframes flow-dash-cyan {
+  from { stroke-dashoffset: 24; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes flow-dash-purple {
+  from { stroke-dashoffset: 24; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes flow-dash-lava {
+  from { stroke-dashoffset: 24; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes flow-dash-green {
+  from { stroke-dashoffset: 16; }
+  to { stroke-dashoffset: 0; }
+}
+
+/* Flowing Particles along SVG paths */
+.flow-particle {
+  r: 4.5;
+  fill: #fff;
+  filter: drop-shadow(0 0 8px #fff);
+}
+.flow-particle.cyan { fill: var(--sim-cyan); filter: drop-shadow(0 0 8px var(--sim-cyan)); }
+.flow-particle.spill { fill: var(--sim-lava); filter: drop-shadow(0 0 12px var(--sim-lava)); r: 5.5; }
+.flow-particle.green { fill: var(--sim-green); filter: drop-shadow(0 0 8px var(--sim-green)); }
+.flow-particle.purple { fill: var(--sim-purple); filter: drop-shadow(0 0 8px var(--sim-purple)); }
+
+/* ── Cluster Architecture Topology Diagram ───────────────── */
+.sim-topology-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr 200px;
+  gap: 20px;
+  align-items: stretch;
+  position: relative;
+  z-index: 10;
+}
+
+/* Driver Node Box */
+.sim-node-box {
+  background: rgba(14, 23, 42, 0.88);
+  border: 1px solid var(--sim-border);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  backdrop-filter: blur(10px);
+  position: relative;
+}
+.sim-node-box.driver {
+  border-color: rgba(0, 210, 255, 0.4);
+  box-shadow: 0 0 20px rgba(0, 210, 255, 0.08);
+}
+.sim-node-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sim-node-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sim-component-pill {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--sim-text-muted);
+}
+.sim-driver-modules {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.sim-module-item {
+  background: #09101d;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sim-module-name {
+  font-weight: 600;
+  color: var(--sim-text);
+}
+.sim-module-status {
+  font-size: 9.5px;
+  color: var(--sim-cyan);
+}
+
+/* Workers & Executors Grid */
+.sim-workers-area {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.sim-workers-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--sim-text-muted);
+}
+.sim-workers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+.sim-worker-card {
+  background: rgba(14, 23, 42, 0.95);
+  border: 1px solid var(--sim-border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  transition: all 0.25s ease;
+}
+.sim-worker-card.active {
+  border-color: rgba(0, 210, 255, 0.5);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+.sim-worker-card.spilling {
+  border-color: var(--sim-lava) !important;
+  box-shadow: 0 0 20px rgba(255, 54, 33, 0.35) !important;
+  animation: pulse-spill 1.2s infinite ease-in-out;
+}
+@keyframes pulse-spill {
+  0%, 100% { border-color: rgba(255, 54, 33, 0.8); }
+  50% { border-color: rgba(255, 106, 82, 0.3); }
+}
+
+.sim-worker-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sim-worker-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+}
+.sim-worker-status {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--sim-green);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.sim-worker-status.busy {
+  color: var(--sim-orange);
+}
+.sim-worker-status.spill {
+  color: var(--sim-lava);
+}
+
+/* CPU Core Task Slots */
+.sim-cores-bar {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.sim-core-slot {
+  flex: 1;
+  height: 18px;
+  border-radius: 4px;
+  background: #18243c;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--sim-text-muted);
+  transition: all 0.2s;
+}
+.sim-core-slot.active {
+  background: rgba(0, 210, 255, 0.2);
+  border-color: var(--sim-cyan);
+  color: #fff;
+  box-shadow: 0 0 8px rgba(0, 210, 255, 0.3);
+}
+.sim-core-slot.skew-hot {
+  background: rgba(255, 54, 33, 0.35);
+  border-color: var(--sim-lava);
+  color: #fff;
+  animation: pulse-danger 1s infinite;
+}
+
+/* Worker RAM Usage Bar */
+.sim-ram-track {
+  width: 100%;
+  height: 8px;
+  background: #18243c;
+  border-radius: 99px;
+  overflow: hidden;
+  display: flex;
+}
+.sim-ram-fill-exec {
+  background: var(--sim-cyan);
+  transition: width 0.3s ease;
+}
+.sim-ram-fill-storage {
+  background: var(--sim-purple);
+  transition: width 0.3s ease;
+}
+.sim-ram-fill-spill {
+  background: var(--sim-lava);
+  transition: width 0.3s ease;
+}
+
+/* Spilling & Storage Destination (Right Box) */
+.sim-spill-box {
+  background: rgba(14, 23, 42, 0.88);
+  border: 1px solid var(--sim-border);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  backdrop-filter: blur(10px);
+}
+.sim-spill-box.active-spill {
+  border-color: var(--sim-lava);
+  box-shadow: 0 0 24px rgba(255, 54, 33, 0.25);
+}
+.sim-disk-target {
+  background: #09101d;
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.sim-disk-target.spilling {
+  border-color: var(--sim-lava);
+  background: rgba(255, 54, 33, 0.08);
+}
+.sim-disk-icon {
+  font-size: 24px;
+}
+.sim-disk-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--sim-text);
+}
+.sim-spill-meter {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--sim-lava);
+}
+
+/* ── Executor JVM Memory Breakdown Model (Visual Stack) ──── */
+.sim-memory-model-box {
+  background: var(--sim-panel);
+  border: 1px solid var(--sim-border);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.sim-mem-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.sim-mem-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sim-stacked-mem-bar {
+  display: flex;
+  height: 38px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #09101d;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6);
+}
+.sim-mem-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 6px;
+  transition: width 0.3s ease;
+  position: relative;
+}
+.sim-mem-block.reserved {
+  background: #334155;
+}
+.sim-mem-block.user {
+  background: #475569;
+}
+.sim-mem-block.storage {
+  background: #7c3aed;
+}
+.sim-mem-block.exec {
+  background: #0284c7;
+}
+.sim-mem-block.spill-risk {
+  background: var(--sim-lava);
+  animation: pulse-danger 1.5s infinite;
+}
+.sim-mem-block.offheap {
+  background: #0d9488;
+}
+
+/* Memory Legend */
+.sim-mem-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-top: 4px;
+}
+.sim-mleg-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  color: var(--sim-text-muted);
+}
+.sim-mleg-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+/* ── Spark DAG Stages & Tasks Pipeline (Mini-Spark UI) ────── */
+.sim-stages-box {
+  background: var(--sim-panel);
+  border: 1px solid var(--sim-border);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.sim-stages-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sim-stage-flow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 8px 0;
+}
+.sim-stage-node {
+  flex: 1;
+  min-width: 210px;
+  background: var(--sim-panel-alt);
+  border: 1px solid var(--sim-border);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+.sim-stage-node.active {
+  border-color: var(--sim-cyan);
+  box-shadow: 0 0 16px rgba(0, 210, 255, 0.2);
+}
+.sim-stage-node.shuffle-boundary {
+  border-color: var(--sim-purple);
+}
+.sim-stage-node.straggler {
+  border-color: var(--sim-lava);
+  box-shadow: 0 0 20px rgba(255, 54, 33, 0.3);
+}
+
+.sim-stage-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.sim-stage-id {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--sim-cyan);
+  text-transform: uppercase;
+}
+.sim-stage-name {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #fff;
+}
+.sim-stage-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--sim-text-muted);
+}
+.sim-stage-progress {
+  width: 100%;
+  height: 6px;
+  background: #1e293b;
+  border-radius: 99px;
+  overflow: hidden;
+}
+.sim-stage-prog-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--sim-cyan), var(--sim-green));
+  border-radius: 99px;
+  transition: width 0.3s;
+}
+
+/* Futuristic Arrow Connector between Stages */
+.sim-stage-connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 90px;
+  user-select: none;
+  flex-shrink: 0;
+}
+.sim-connector-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  background: rgba(0, 210, 255, 0.08);
+  border: 1px solid rgba(0, 210, 255, 0.25);
+  border-radius: 99px;
+  padding: 4px 14px;
+  color: var(--sim-cyan);
+  font-size: 15px;
+  font-weight: 800;
+  box-shadow: 0 0 14px rgba(0, 210, 255, 0.2);
+  transition: all 0.3s ease;
+}
+.sim-connector-line.spill {
+  border-color: var(--sim-lava);
+  color: var(--sim-lava);
+  box-shadow: 0 0 18px rgba(255, 54, 33, 0.4);
+  background: rgba(255, 54, 33, 0.15);
+}
+.sim-connector-line.serverless {
+  border-color: var(--sim-green);
+  color: var(--sim-green);
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.3);
+  background: rgba(16, 185, 129, 0.15);
+}
+.sim-chevron {
+  display: inline-block;
+  animation: chevron-pulse 1.2s infinite ease-in-out;
+}
+.sim-ch-1 { animation-delay: 0s; }
+.sim-ch-2 { animation-delay: 0.2s; }
+.sim-ch-3 { animation-delay: 0.4s; }
+
+@keyframes chevron-pulse {
+  0%, 100% { opacity: 0.3; transform: translateX(-2px); }
+  50% { opacity: 1; transform: translateX(3px); text-shadow: 0 0 10px currentColor; }
+}
+
+.sim-connector-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--sim-text-muted);
+  white-space: nowrap;
+}
+
+/* ── Prescriptive Best Practices & Config Advisor ────────── */
+.sim-advisor-box {
+  background: linear-gradient(135deg, rgba(13, 21, 39, 0.95), rgba(17, 28, 52, 0.95));
+  border: 1px solid var(--sim-border);
+  border-radius: 18px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+}
+.sim-advisor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--sim-border);
+  padding-bottom: 14px;
+}
+.sim-advisor-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sim-advisor-title svg {
+  color: var(--sim-amber);
+}
+
+.sim-recommendations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.sim-rec-item {
+  background: #09101d;
+  border: 1px solid var(--sim-border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sim-rec-item.urgent {
+  border-color: rgba(255, 54, 33, 0.4);
+  background: rgba(255, 54, 33, 0.05);
+}
+.sim-rec-item.good {
+  border-color: rgba(16, 185, 129, 0.4);
+  background: rgba(16, 185, 129, 0.05);
+}
+.sim-rec-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sim-rec-desc {
+  font-size: 12.5px;
+  color: var(--sim-text-muted);
+  line-height: 1.5;
+}
+.sim-code-snippet {
+  background: #050912;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-family: 'JetBrains Mono', 'Space Mono', monospace;
+  font-size: 11.5px;
+  color: #38bdf8;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow-x: auto;
+}
+.sim-copy-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.15s;
+  flex-shrink: 0;
+}
+.sim-copy-btn:hover {
+  background: var(--sim-cyan);
+  color: #000;
+}
+
+/* ── Responsive Styling (Mobile & Tablet) ─────────────────── */
+@media (max-width: 1080px) {
+  .sim-grid {
+    grid-template-columns: 1fr;
+  }
+  .sim-controls-card {
+    position: static;
+  }
+  .sim-topology-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .sim-container {
+    padding: 14px 10px 60px;
+  }
+  .sim-metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .sim-stage-flow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .sim-stage-arrow {
+    transform: rotate(90deg);
+  }
+}

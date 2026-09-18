@@ -20,6 +20,7 @@
   <link rel="stylesheet" href="css/animations.css?v=d2">
   <link rel="stylesheet" href="css/dais-arch.css?v=d2">
   <link rel="stylesheet" href="css/matrix-view.css?v=d2">
+  <link rel="stylesheet" href="css/spark-simulator.css?v=d3">
 
   <!-- Three.js via importmap -->
   <script type="importmap">
@@ -130,6 +131,9 @@
       </button>
       <button class="view-tab" data-view="patterns" role="tab" aria-selected="false" id="tab-patterns">
         Reference Patterns
+      </button>
+      <button class="view-tab" data-view="simulator" role="tab" aria-selected="false" id="tab-simulator">
+        Spark Simulator
       </button>
     </nav>
 
@@ -485,6 +489,11 @@
       </div>
     </div><!-- /patterns-panel -->
 
+    <!-- ── 4. SPARK SIMULATOR PANEL ────────────────────────── -->
+    <div class="page-view" id="simulator-panel" data-panel="simulator" style="display:none">
+      <div id="simulator-mount"></div>
+    </div>
+
   </main><!-- /workspace -->
 
   <!-- ── STATUS BAR ─────────────────────────────────────── -->
@@ -535,6 +544,6 @@
 </div><!-- /explorer -->
 
 <!-- ── Boot ───────────────────────────────────────────────── -->
-<script type="module" src="js/main.js?v=d2"></script>
+<script type="module" src="js/main.js?v=d3"></script>
 </body>
 </html>
