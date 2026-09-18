@@ -17,19 +17,20 @@ export function renderSparkSimulator() {
   container.id = 'spark-sim-root';
 
   // Initial State
+  // Initial State
   const state = {
-    dataSizeGB: 2000,           // 2 TB default
-    workload: 'aggregation',    // aggregation, join, etl, streaming
+    dataSizeGB: 2000,              // 2 TB default
+    maxPartitionBytesMB: 128,      // 128 MB default file split (spark.sql.files.maxPartitionBytes)
+    workload: 'aggregation',       // aggregation, join, etl, streaming
     clusterMode: 'classic_static', // classic_static, classic_autoscale, serverless
-    workerCount: 8,             // 8 worker nodes
-    workerCores: 8,             // 8 cores per node = 64 cores
-    workerRAM: 32,              // 32 GB RAM per node
-    partitions: 200,            // default 200 shuffle partitions
-    aqeEnabled: false,          // Adaptive Query Execution
-    photonEnabled: false,       // Databricks Photon Vectorized Engine
-    dataSkew: 'none',           // none, moderate, severe
-    gcMode: 'g1gc',             // g1gc, parallel
-    activePreset: 'disaster200' // current preset
+    workerCount: 8,                // 8 worker nodes
+    workerCores: 8,                // 8 cores per node = 64 cores
+    workerRAM: 32,                 // 32 GB RAM per node
+    partitions: 200,               // default 200 shuffle partitions
+    aqeEnabled: false,             // Adaptive Query Execution
+    photonEnabled: false,          // Databricks Photon Vectorized Engine
+    dataSkew: 'none',              // none, moderate, severe
+    gcMode: 'g1gc'                 // g1gc, parallel
   };
 
   // Build the complete Simulator UI
@@ -45,31 +46,6 @@ export function renderSparkSimulator() {
         Understand how distributed Spark clusters execute multi-terabyte queries, manage JVM memory,
         spill to disk, trigger garbage collection pauses, and scale dynamically — with real-time animated data flows.
       </p>
-    </div>
-
-    <!-- Quick Scenario Presets -->
-    <div class="sim-presets-bar">
-      <span class="sim-presets-label">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        Scenario Presets:
-      </span>
-      <div class="sim-presets-list" id="sim-presets-list">
-        <button class="sim-preset-btn active" data-preset="disaster200">
-          <span>⚠️</span> Default 200 Partitions Spill
-        </button>
-        <button class="sim-preset-btn" data-preset="aqe_rescue">
-          <span>🚀</span> AQE Auto-Tuning Rescue
-        </button>
-        <button class="sim-preset-btn" data-preset="data_skew">
-          <span>🔥</span> Severe Data Skew Straggler
-        </button>
-        <button class="sim-preset-btn" data-preset="serverless_burst">
-          <span>⚡</span> Databricks Serverless Instant Burst
-        </button>
-        <button class="sim-preset-btn" data-preset="photon_speed">
-          <span>💎</span> Photon Vectorized Engine
-        </button>
-      </div>
     </div>
 
     <!-- Main Simulator Grid: Control Deck on Left, Visuals on Right -->
@@ -285,17 +261,17 @@ export function renderSparkSimulator() {
               </filter>
 
               <!-- Arrowhead Markers -->
-              <marker id="arrow-cyan" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#00d2ff"/>
+              <marker id="arrow-cyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M 0 1 L 9 5 L 0 9 z" fill="#00d2ff"/>
               </marker>
-              <marker id="arrow-green" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#10b981"/>
+              <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M 0 1 L 9 5 L 0 9 z" fill="#10b981"/>
               </marker>
-              <marker id="arrow-purple" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#c084fc"/>
+              <marker id="arrow-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M 0 1 L 9 5 L 0 9 z" fill="#c084fc"/>
               </marker>
-              <marker id="arrow-lava" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#ff3621"/>
+              <marker id="arrow-lava" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+                <path d="M 0 1 L 9 5 L 0 9 z" fill="#ff3621"/>
               </marker>
             </defs>
             <g id="flow-paths-layer"></g>
@@ -436,7 +412,8 @@ export function renderSparkSimulator() {
               </div>
               <div class="sim-stage-name">Scan Delta Lake & Filter</div>
               <div class="sim-stage-meta">
-                <span>Tasks: <b id="stage0-tasks">2,000</b></span>
+                <span>Tasks: <b id="stage0-tasks">16,000</b></span>
+                <span>Split: <b id="stage0-split">128 MB</b></span>
                 <span>Shuffle Write: <b id="stage0-write">2,000 GB</b></span>
               </div>
               <div class="sim-stage-progress">
@@ -551,82 +528,6 @@ function initSimulatorLogic(container, state) {
       updateAll();
     });
   });
-
-  // Preset Buttons
-  container.querySelectorAll('.sim-preset-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      container.querySelectorAll('.sim-preset-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      applyPreset(btn.dataset.preset);
-    });
-  });
-
-  function applyPreset(presetKey) {
-    state.activePreset = presetKey;
-    if (presetKey === 'disaster200') {
-      state.dataSizeGB = 2000;
-      state.workload = 'aggregation';
-      state.clusterMode = 'classic_static';
-      state.workerCount = 8;
-      state.workerCores = 8;
-      state.workerRAM = 32;
-      state.partitions = 200;
-      state.aqeEnabled = false;
-      state.photonEnabled = false;
-      state.dataSkew = 'none';
-      state.gcMode = 'parallel';
-    } else if (presetKey === 'aqe_rescue') {
-      state.dataSizeGB = 2000;
-      state.workload = 'aggregation';
-      state.clusterMode = 'classic_autoscale';
-      state.workerCount = 12;
-      state.workerCores = 8;
-      state.workerRAM = 32;
-      state.partitions = 200; // AQE will override dynamically
-      state.aqeEnabled = true;
-      state.photonEnabled = false;
-      state.dataSkew = 'none';
-      state.gcMode = 'g1gc';
-    } else if (presetKey === 'data_skew') {
-      state.dataSizeGB = 2000;
-      state.workload = 'join';
-      state.clusterMode = 'classic_static';
-      state.workerCount = 8;
-      state.workerCores = 8;
-      state.workerRAM = 32;
-      state.partitions = 800;
-      state.aqeEnabled = false;
-      state.photonEnabled = false;
-      state.dataSkew = 'severe';
-      state.gcMode = 'g1gc';
-    } else if (presetKey === 'serverless_burst') {
-      state.dataSizeGB = 2000;
-      state.workload = 'aggregation';
-      state.clusterMode = 'serverless';
-      state.workerCount = 16;
-      state.workerCores = 8;
-      state.workerRAM = 32;
-      state.partitions = 1200;
-      state.aqeEnabled = true;
-      state.photonEnabled = true;
-      state.dataSkew = 'none';
-      state.gcMode = 'g1gc';
-    } else if (presetKey === 'photon_speed') {
-      state.dataSizeGB = 3000;
-      state.workload = 'aggregation';
-      state.clusterMode = 'serverless';
-      state.workerCount = 12;
-      state.workerCores = 8;
-      state.workerRAM = 32;
-      state.partitions = 1600;
-      state.aqeEnabled = true;
-      state.photonEnabled = true;
-      state.dataSkew = 'none';
-      state.gcMode = 'g1gc';
-    }
-    syncInputsFromState();
-    updateAll();
-  }
 
   function syncInputsFromState() {
     dataSlider.value = state.dataSizeGB;
@@ -802,7 +703,11 @@ function computeSparkPhysics(s) {
   const userMemGB = usableHeapGB * (1 - sparkMemoryFraction);
   const execMemPerTaskSlotGB = executionMemGB / s.workerCores;
 
-  // 3. Partitioning & AQE Logic
+  // 3. File Input Slicing (spark.sql.files.maxPartitionBytes) & Stage 0 Tasks
+  const maxPartBytesMB = s.maxPartitionBytesMB || 128;
+  const stage0Tasks = Math.max(totalCores, Math.ceil((s.dataSizeGB * 1024) / maxPartBytesMB));
+
+  // 4. Shuffle Partitioning & AQE Logic
   let effectivePartitions = s.partitions;
   if (s.aqeEnabled) {
     // AQE targets 128 MB per partition automatically
@@ -810,7 +715,7 @@ function computeSparkPhysics(s) {
     effectivePartitions = Math.max(totalCores, Math.ceil(s.dataSizeGB / targetSizeGB));
   }
 
-  // 4. Data per Partition & Spilling
+  // 5. Data per Partition & Spilling
   const avgPartitionSizeGB = s.dataSizeGB / effectivePartitions;
   let maxPartitionSizeGB = avgPartitionSizeGB;
 
@@ -936,6 +841,7 @@ function computeSparkPhysics(s) {
     storageMemGB,
     executionMemGB,
     execMemPerTaskSlotGB,
+    stage0Tasks,
     effectivePartitions,
     avgPartitionSizeGB,
     maxPartitionSizeGB,
@@ -1032,7 +938,10 @@ function renderMemoryBar(container, state, physics) {
 
 // ── Render Stage Pipeline (Mini-Spark UI) ─────────────────────
 function renderStagesPipeline(container, state, physics) {
-  container.querySelector('#stage0-tasks').textContent = Math.round(state.dataSizeGB / 1.0).toLocaleString();
+  const stage0TasksEl = container.querySelector('#stage0-tasks');
+  if (stage0TasksEl) stage0TasksEl.textContent = physics.stage0Tasks.toLocaleString();
+  const stage0SplitEl = container.querySelector('#stage0-split');
+  if (stage0SplitEl) stage0SplitEl.textContent = `${state.maxPartitionBytesMB} MB`;
   container.querySelector('#stage0-write').textContent = `${state.dataSizeGB.toLocaleString()} GB`;
   container.querySelector('#stage1-parts').textContent = physics.effectivePartitions.toLocaleString();
   container.querySelector('#stage1-spill').textContent = `${physics.diskSpillGB.toLocaleString()} GB`;
@@ -1119,7 +1028,7 @@ function renderFlowSvg(container, state, physics) {
     const deltaX = targetX - driverRightX;
     const c1X = driverRightX + Math.max(20, deltaX * 0.42);
     const c2X = targetX - Math.max(20, deltaX * 0.42);
-    const taskPathD = `M ${driverRightX.toFixed(1)} ${driverY.toFixed(1)} C ${c1X.toFixed(1)} ${driverY.toFixed(1)}, ${c2X.toFixed(1)} ${targetY.toFixed(1)}, ${(targetX - 5).toFixed(1)} ${targetY.toFixed(1)}`;
+    const taskPathD = `M ${driverRightX.toFixed(1)} ${driverY.toFixed(1)} C ${c1X.toFixed(1)} ${driverY.toFixed(1)}, ${c2X.toFixed(1)} ${targetY.toFixed(1)}, ${(targetX - 2).toFixed(1)} ${targetY.toFixed(1)}`;
 
     const pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     pathEl.setAttribute('d', taskPathD);
@@ -1158,7 +1067,7 @@ function renderFlowSvg(container, state, physics) {
         const delta = bLeft - aRight;
         const c1X = aRight + delta * 0.45;
         const c2X = bLeft - delta * 0.45;
-        const shufflePathD = `M ${aRight.toFixed(1)} ${aY.toFixed(1)} C ${c1X.toFixed(1)} ${(aY - 10).toFixed(1)}, ${c2X.toFixed(1)} ${(bY - 10).toFixed(1)}, ${(bLeft - 5).toFixed(1)} ${bY.toFixed(1)}`;
+        const shufflePathD = `M ${aRight.toFixed(1)} ${aY.toFixed(1)} C ${c1X.toFixed(1)} ${(aY - 10).toFixed(1)}, ${c2X.toFixed(1)} ${(bY - 10).toFixed(1)}, ${(bLeft - 2).toFixed(1)} ${bY.toFixed(1)}`;
 
         const shufflePath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         shufflePath.setAttribute('d', shufflePathD);
@@ -1195,7 +1104,7 @@ function renderFlowSvg(container, state, physics) {
       const c2X = spillLeftX - Math.max(25, deltaX * 0.45);
       const targetY = (spillRect.top - boardRect.top) + (spillRect.height * (0.32 + sIdx * 0.25));
 
-      const spillPathD = `M ${wRight.toFixed(1)} ${wCenterY.toFixed(1)} C ${c1X.toFixed(1)} ${wCenterY.toFixed(1)}, ${c2X.toFixed(1)} ${targetY.toFixed(1)}, ${(spillLeftX - 5).toFixed(1)} ${targetY.toFixed(1)}`;
+      const spillPathD = `M ${wRight.toFixed(1)} ${wCenterY.toFixed(1)} C ${c1X.toFixed(1)} ${wCenterY.toFixed(1)}, ${c2X.toFixed(1)} ${targetY.toFixed(1)}, ${(spillLeftX - 2).toFixed(1)} ${targetY.toFixed(1)}`;
 
       const spillPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       spillPath.setAttribute('d', spillPathD);
@@ -1311,6 +1220,17 @@ function renderAdvisor(container, state, physics) {
     desc: `Instead of scanning ${state.dataSizeGB >= 1000 ? (state.dataSizeGB/1000).toFixed(1) + ' TB' : state.dataSizeGB + ' GB'} across the network, cluster your Delta table on frequently filtered keys. Spark will skip irrelevant Parquet files before even scheduling Stage 0.`,
     code: `CREATE TABLE gold_metrics\nUSING DELTA\nCLUSTER BY (customer_id, transaction_date)\nAS SELECT * FROM silver_events;`
   });
+
+  // Rule 6: High-Volume File Ingestion Tuning (spark.sql.files.maxPartitionBytes)
+  if (state.workload === 'etl' || state.dataSizeGB >= 1000 || physics.totalRuntimeSec > 400) {
+    const isHeavy = state.dataSizeGB >= 2000;
+    recs.push({
+      urgent: isHeavy,
+      title: `⚡ File Read Throughput: Tune spark.sql.files.maxPartitionBytes`,
+      desc: `When loading large Parquet or Delta Lake tables (${state.dataSizeGB >= 1000 ? (state.dataSizeGB/1000).toFixed(1) + ' TB' : state.dataSizeGB + ' GB'}), Spark slices input files into splits up to spark.sql.files.maxPartitionBytes (default: 134,217,728 bytes / 128 MB), resulting in ${physics.stage0Tasks.toLocaleString()} file-scan tasks in Stage 0. For large-scale data lake ingestion, tuning this to 256 MB or 512 MB avoids creating tens of thousands of tiny tasks and reduces Driver task scheduling overhead by up to 40%. Combine with openCostInBytes (4 MB) to prevent small-file penalties.`,
+      code: `-- Databricks File Ingestion & Stage 0 Read Optimization:\nspark.conf.set("spark.sql.files.maxPartitionBytes", "268435456") -- 256 MB split size\nspark.conf.set("spark.sql.files.openCostInBytes", "4194304")     -- 4 MB file open cost\n-- Delta Lake auto-compaction to eliminate small file problems:\nspark.conf.set("spark.databricks.delta.optimizeWrite.enabled", "true")\nspark.conf.set("spark.databricks.delta.autoCompact.enabled", "true")`
+    });
+  }
 
   recs.forEach(r => {
     const item = document.createElement('div');
