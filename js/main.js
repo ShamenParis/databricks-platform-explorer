@@ -3,7 +3,7 @@
  * Wires all modules together and handles view switching.
  */
 
-import { initScene, selectItem, clearSelection, setSeparation, setExploded, resetCamera, zoomIn, zoomOut, panUp, panDown, resizeRenderer, highlightOpenSource, setCameraMode, focusLayer } from './scene.js?v=d2';
+import { initScene, selectItem, clearSelection, setSeparation, setExploded, resetCamera, zoomIn, zoomOut, panUp, panDown, resizeRenderer, highlightOpenSource, setCameraMode, focusLayer } from './scene.js?v=d7';
 import { initNav, setActiveLayerSilent, setActiveCompSilent } from './nav.js?v=d2';
 import { initInspector, showWelcome, showLayerDetail, showCompDetail } from './inspector.js?v=d2';
 import { LAYERS, COMPONENT_MAP } from './data.js?v=d2';
@@ -112,20 +112,30 @@ function switchViewportMode(mode) {
   }
 }
 
-// ── Camera Angle Switcher (ISO / TOP) ───────────────────────
+// ── Camera Angle Switcher (ISO / FRONT / TOP) ───────────────
 function initCameraButtons() {
   const btnIso = document.getElementById('btn-cam-iso');
+  const btnFront = document.getElementById('btn-cam-front');
   const btnTop = document.getElementById('btn-cam-top');
 
   btnIso?.addEventListener('click', () => {
     btnIso.classList.add('active');
+    btnFront?.classList.remove('active');
     btnTop?.classList.remove('active');
     setCameraMode('iso');
+  });
+
+  btnFront?.addEventListener('click', () => {
+    btnFront.classList.add('active');
+    btnIso?.classList.remove('active');
+    btnTop?.classList.remove('active');
+    setCameraMode('front');
   });
 
   btnTop?.addEventListener('click', () => {
     btnTop.classList.add('active');
     btnIso?.classList.remove('active');
+    btnFront?.classList.remove('active');
     setCameraMode('top');
   });
 }
